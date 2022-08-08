@@ -1,0 +1,41 @@
+/*Common Styles*/
+
+* {
+    font-family: "Times New Roman", sans-serif;
+    border-color: dimgray;
+    color: lightgray;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: black;
+}
+
+header .h0 {
+    font-size: xxx-large;
+}
+
+/*Detailed Styles*/
+
+.tab {
+    overflow: scroll; /*sets the desired behavior for overflown elements inside*/
+    border: 1px solid #3f3f3f;
+    background-color: #1f1f1f;
+}
+
+.tab button {
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 12px 16px;
+    transition: 0.2s;
+}
+
+.tab button:hover {
+    background-color: #7f7f7f;
+}
+
+tags {
+    visibility: hidden;
+}
