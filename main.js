@@ -22,6 +22,10 @@ class global {
         global.Synonym[c] = g.split(' ')
     })
 }
-{
+{ // process tags
 
+}
+{ // audio
+    const fieldset = document.getElementById('audio')
+    const inputs = fieldset.getElementsByTagName('input')
 }
