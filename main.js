@@ -45,8 +45,6 @@ class global { // globals
                 break
             case 'voltage':
                 break
-            case 'dBm':
-                break
             case 'dBu':
                 break
             case 'dBV':
@@ -59,6 +57,13 @@ class global { // globals
                 break
             case 'power':
                 break
+            case 'dBm':
+                break
+            case 'dBW':
+                break
         }
     }
+
+    // local functions
+
 }
