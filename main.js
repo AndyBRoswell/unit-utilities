@@ -1,9 +1,11 @@
-class global {
+class global { // globals
     static Synonym = {}
     static SynonymID = {}
 
     static tag = []
 }
+
+// global process
 
 { // set synonyms
     let c = 0
@@ -23,9 +25,40 @@ class global {
     })
 }
 { // process tags
+    const converters = document.getElementsByClassName('converter')
+    for (let converter in converters) {
 
+    }
 }
+
+// concrete unit converters
+
 { // audio
-    const fieldset = document.getElementById('audio')
+    const fieldset = document.getElementById('audio') // get the targeted unit converter console
+
+    // add event listeners
+    const wave_form_select = fieldset.getElementsByTagName('select')[0]
     const inputs = fieldset.getElementsByTagName('input')
+    for (let input of inputs) {
+        switch (input.getAttribute('name')) {
+            case 'peak-voltage':
+                break
+            case 'voltage':
+                break
+            case 'dBm':
+                break
+            case 'dBu':
+                break
+            case 'dBV':
+                break
+            case 'peak-current':
+                break
+            case 'current':
+                break
+            case 'impedance':
+                break
+            case 'power':
+                break
+        }
+    }
 }
