@@ -17,7 +17,7 @@
     </fieldset>
     <br>
 
-    <fieldset>
+    <fieldset class="converter" id="audio">
         <legend>音频</legend>
         <fieldset>
             <legend>标签</legend>
@@ -31,55 +31,43 @@
                 <tag>音响</tag>
             </tags>
         </fieldset>
-        <br>
-        <fieldset>
-            <table>
-                <tr>
-                    <td><label>波形</label></td>
-                    <td><select name="wave-form">
-                        <option value="sine">正弦波</option>
-                        <option value="triangle">三角波</option>
-                        <option value="square">方波</option>
-                    </select></td>
-                </tr>
-                <tr>
-                    <td><label>电压峰值</label></td>
-                    <td><input type="number" name="peak-voltage"><label>V</label></td>
-                </tr>
-                <tr>
-                    <td><label>电压有效值</label></td>
-                    <td><input type="number" name="effective-voltage" value="380"><label>V</label></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><input type="number" name="effective-voltage"><label>dBm</label><br></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><input type="number" name="effective-voltage"><label>dBu</label><br></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><input type="number" name="effective-voltage"><label>dBV</label><br></td>
-                </tr>
-                <tr>
-                    <td><label>电流峰值</label></td>
-                    <td><input type="number" name="peak-voltage"><label>A</label></td>
-                </tr>
-                <tr>
-                    <td><label>电流有效值</label></td>
-                    <td><input type="number" name="effective-voltage"><label>A</label></td>
-                </tr>
-                <tr>
-                    <td><label>阻抗</label></td>
-                    <td><input type="number" name="impedance" value="4"><label>Ω</label></td>
-                </tr>
-                <tr>
-                    <td><label>功率</label></td>
-                    <td><input type="number" name="effective-voltage"><label>W</label></td>
-                </tr>
-            </table>
-        </fieldset>
+        <table>
+            <tr>
+                <td><label>波形</label></td>
+                <td><select name="wave-form">
+                    <option value="sine">正弦波</option>
+                    <option value="triangle">三角波</option>
+                    <option value="square">方波</option>
+                </select></td>
+            </tr>
+            <tr>
+                <td><label>电压峰值</label></td><td><input type="number" name="peak-voltage"><label>V</label></td>
+            </tr>
+            <tr>
+                <td><label>电压有效值</label></td><td><input type="number" name="effective-voltage" value="380"><label>V</label></td>
+            </tr>
+            <tr>
+                <td></td><td><input type="number" name="effective-voltage"><label>dBm</label><br></td>
+            </tr>
+            <tr>
+                <td></td><td><input type="number" name="effective-voltage"><label>dBu</label><br></td>
+            </tr>
+            <tr>
+                <td></td><td><input type="number" name="effective-voltage"><label>dBV</label><br></td>
+            </tr>
+            <tr>
+                <td><label>电流峰值</label></td><td><input type="number" name="peak-voltage"><label>A</label></td>
+            </tr>
+            <tr>
+                <td><label>电流有效值</label></td><td><input type="number" name="effective-voltage"><label>A</label></td>
+            </tr>
+            <tr>
+                <td><label>阻抗</label></td><td><input type="number" name="impedance" value="4"><label>Ω</label></td>
+            </tr>
+            <tr>
+                <td><label>功率</label></td><td><input type="number" name="effective-voltage"><label>W</label></td>
+            </tr>
+        </table>
     </fieldset>
 </main>
 </body>

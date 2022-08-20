@@ -25,4 +25,3 @@ class global {
 {
 
 }
-console.log(global.Synonym)
