@@ -62,10 +62,10 @@ class global { // globals
     const P_input = input[7], dBm_input = input[8], dBW_input = input[9]
 
     read() // read initial values
-    console.log(value_keeper)
 
     // add event listeners
     UE_input.addEventListener('input', (e) => {
+        read()
         const v = value_keeper
         v.IE = v.UE / v.Z
         v.P = v.UE * v.IE
