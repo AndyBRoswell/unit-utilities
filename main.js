@@ -34,36 +34,26 @@ class global { // globals
 // concrete unit converters
 
 { // audio
+    // get the essential tags (elements / nodes)
     const fieldset = document.getElementById('audio') // get the targeted unit converter console
+    const output_area = fieldset.getElementsByClassName('output-area')[0] // get the message output area
 
     // add event listeners
     const wave_form_select = fieldset.getElementsByTagName('select')[0]
-    const inputs = fieldset.getElementsByTagName('input')
-    for (let input of inputs) {
-        switch (input.getAttribute('name')) {
-            case 'peak-voltage':
-                break
-            case 'voltage':
-                break
-            case 'dBu':
-                break
-            case 'dBV':
-                break
-            case 'peak-current':
-                break
-            case 'current':
-                break
-            case 'impedance':
-                break
-            case 'power':
-                break
-            case 'dBm':
-                break
-            case 'dBW':
-                break
-        }
-    }
+    const input = fieldset.getElementsByTagName('input')
+    // U: Voltage, I: Current, Z: Impedance, P: Power; [subscript] P: Peak, E: Effective
+    const UP_input = input[0], UE_input = input[1], dBu_input = input[2], dBV_input = input[3]
+    const IP_input = input[4], IE_input = input[5]
+    const Z_input = input[6]
+    const P_input = input[7], dBm_input = input[8], dBW_input = input[9]
+
+    UE_input.value = 380 // set default values and fire the corresponding event handlers
+    UE_input.addEventListener('input', (e) => {
+
+    })
 
     // local functions
-
+    function print(message) {
+        output_area.innerHTML = message
+    }
 }
