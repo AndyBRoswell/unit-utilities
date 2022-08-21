@@ -126,6 +126,22 @@ class global { // globals
         v.convert_V()
         v.convert_W()
     })
+    E_H_Map.set(dBW_input, () => {
+        const v = value_keeper
+        v.P = Math.pow(10, v.dBW / 10)
+        v.UE = Math.sqrt(v.P * v.Z)
+        v.IE = v.UE / v.Z
+        v.convert_V()
+        v.convert_W()
+    })
+    E_H_Map.set(dBm_input, () => {
+        const v = value_keeper
+        v.P = Math.pow(10, (v.dBm - 30) / 10)
+        v.UE = Math.sqrt(v.P * v.Z)
+        v.IE = v.UE / v.Z
+        v.convert_V()
+        v.convert_W()
+    })
     add_input_EHs_with_auto_rw(E_H_Map)
 
     // fire the corresponding event handlers and show an example of this unit converter utility
