@@ -65,12 +65,12 @@ class global { // globals
 
     { // read initial values
         const v = value_keeper
-        v.UP = parseFloat(UP_input.innerHTML), v.UE = parseFloat(UE_input.innerHTML)
-        v.dBu = parseFloat(dBu_input.innerHTML), v.dBV = parseFloat(dBV_input.innerHTML)
-        v.IP = parseFloat(IP_input.innerHTML), v.IE = parseFloat(IE_input.innerHTML)
-        v.Z = parseFloat(Z_input.innerHTML)
-        v.P = parseFloat(P_input.innerHTML)
-        v.dBm = parseFloat(dBm_input.innerHTML), v.dBw = parseFloat(dBW_input.innerHTML)
+        v.UP = parseFloat(UP_input.value), v.UE = parseFloat(UE_input.value)
+        v.dBu = parseFloat(dBu_input.value), v.dBV = parseFloat(dBV_input.value)
+        v.IP = parseFloat(IP_input.value), v.IE = parseFloat(IE_input.value)
+        v.Z = parseFloat(Z_input.value)
+        v.P = parseFloat(P_input.value)
+        v.dBm = parseFloat(dBm_input.value), v.dBw = parseFloat(dBW_input.value)
     }
     console.log(value_keeper)
 
@@ -87,10 +87,10 @@ class global { // globals
 
     function refresh() {
         const v = value_keeper
-        UP_input.innerHTML = v.UP, UE_input.innerHTML = v.UE, dBu_input.innerHTML = v.dBu, dBV_input.innerHTML = v.dBV
-        IP_input.innerHTML = v.IP, IE_input.innerHTML = v.IE
-        Z_input.innerHTML = v.Z
-        P_input.innerHTML = v.P
-        dBm_input.innerHTML = v.dBm, dBW_input.innerHTML = v.dBw
+        UP_input.value = v.UP, UE_input.value = v.UE, dBu_input.value = v.dBu, dBV_input.value = v.dBV
+        IP_input.value = v.IP, IE_input.value = v.IE
+        Z_input.value = v.Z
+        P_input.value = v.P
+        dBm_input.value = v.dBm, dBW_input.value = v.dBw
     }
 }
