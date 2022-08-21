@@ -55,11 +55,11 @@ class global { // globals
     const output_area = fieldset.getElementsByClassName('output-area')[0] // get the message output area
     const wave_form_select = fieldset.getElementsByTagName('select')[0]
     const input = fieldset.getElementsByTagName('input')
-    // U: Voltage, I: Current, Z: Impedance, P: Power; [subscript] P: Peak, E: Effective
+    // U: Voltage, I: Current, Z: Impedance, S: Apparent Power; [subscript] P: Peak, E: Effective
     const UP_input = input[0], UE_input = input[1], dBu_input = input[2], dBV_input = input[3]
     const IP_input = input[4], IE_input = input[5]
     const Z_input = input[6]
-    const P_input = input[7], dBm_input = input[8], dBW_input = input[9]
+    const S_input = input[7], dBm_input = input[8], dBW_input = input[9]
 
     read() // read initial values
 
@@ -67,8 +67,33 @@ class global { // globals
     UE_input.addEventListener('input', (e) => {
         read() // DON'T FORGET THIS. Or undefined values will bring about some peculiar behaviors.
         const v = value_keeper
+        // Here we primarily make Z fixed when U has changed
         v.IE = v.UE / v.Z
         v.P = v.UE * v.IE
+        write()
+    })
+    IE_input.addEventListener('input', (e) => {
+        read()
+        const v = value_keeper
+        // Here we primarily make Z fixed when I has changed
+        v.UE = v.IE * v.Z
+        v.P = v.UE * v.IE
+        write()
+    })
+    Z_input.addEventListener('input', (e) => {
+        read()
+        const v = value_keeper
+        // Here we primarily make U fixed when Z has changed
+        v.IE = v.UE / v.Z
+        v.P = v.UE * v.IE
+        write()
+    })
+    S_input.addEventListener('input', (e) => {
+        read()
+        const v = value_keeper
+        // Here we primarily make Z fixed and let U, I able to change when S has changed
+        v.UE = Math.sqrt(v.P * v.Z)
+        v.IE = v.UE / v.Z
         write()
     })
 
@@ -86,7 +111,7 @@ class global { // globals
         v.dBu = parseFloat(dBu_input.value), v.dBV = parseFloat(dBV_input.value)
         v.IP = parseFloat(IP_input.value), v.IE = parseFloat(IE_input.value)
         v.Z = parseFloat(Z_input.value)
-        v.P = parseFloat(P_input.value)
+        v.P = parseFloat(S_input.value)
         v.dBm = parseFloat(dBm_input.value), v.dBw = parseFloat(dBW_input.value)
     }
 
@@ -95,7 +120,7 @@ class global { // globals
         UP_input.value = v.UP, UE_input.value = v.UE, dBu_input.value = v.dBu, dBV_input.value = v.dBV
         IP_input.value = v.IP, IE_input.value = v.IE
         Z_input.value = v.Z
-        P_input.value = v.P
+        S_input.value = v.P
         dBm_input.value = v.dBm, dBW_input.value = v.dBw
     }
 }
