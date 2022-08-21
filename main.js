@@ -65,7 +65,7 @@ class global { // globals
 
     // add event listeners
     UE_input.addEventListener('input', (e) => {
-        read()
+        read() // DON'T FORGET THIS. Or undefined values will bring about some peculiar behaviors.
         const v = value_keeper
         v.IE = v.UE / v.Z
         v.P = v.UE * v.IE
