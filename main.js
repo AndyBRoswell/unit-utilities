@@ -44,7 +44,7 @@ class global { // globals
         static Z
         static P
         static dBm
-        static dBw
+        static dBW
         static {
             Object.freeze(this.supported_wave_form)
         }
@@ -68,8 +68,12 @@ class global { // globals
         read() // DON'T FORGET THIS. Or undefined values will bring about some peculiar behaviors.
         const v = value_keeper
         // Here we primarily make Z fixed when U has changed
+        v.dBV = 20 * Math.log10(v.UE)
+        v.dBu = 20 * Math.log10(v.UE / Math.sqrt(1e-3 * 600))
         v.IE = v.UE / v.Z
         v.P = v.UE * v.IE
+        v.dBW = 10 * Math.log10(v.P)
+        v.dBm = v.dBW + 30
         write()
     })
     IE_input.addEventListener('input', (e) => {
@@ -114,19 +118,20 @@ class global { // globals
         v.IP = parseFloat(IP_input.value), v.IE = parseFloat(IE_input.value)
         v.Z = parseFloat(Z_input.value)
         v.P = parseFloat(S_input.value)
-        v.dBm = parseFloat(dBm_input.value), v.dBw = parseFloat(dBW_input.value)
+        v.dBm = parseFloat(dBm_input.value), v.dBW = parseFloat(dBW_input.value)
     }
 
     function write() {
         const v = value_keeper
-        UP_input.value = v.UP, UE_input.value = v.UE, dBu_input.value = v.dBu, dBV_input.value = v.dBV
-        IP_input.value = v.IP, IE_input.value = v.IE
-        Z_input.value = v.Z
-        S_input.value = v.P
-        dBm_input.value = v.dBm, dBW_input.value = v.dBw
-    }
-
-    function update_voltages(){
-        const v = value_keeper
+        if (!isNaN(v.UP)) UP_input.value = v.UP
+        if (!isNaN(v.UE)) UE_input.value = v.UE
+        if (!isNaN(v.dBu)) dBu_input.value = v.dBu
+        if (!isNaN(v.dBV)) dBV_input.value = v.dBV
+        if (!isNaN(v.IP)) IP_input.value = v.IP
+        if (!isNaN(v.IE)) IE_input.value = v.IE
+        if (!isNaN(v.Z)) Z_input.value = v.Z
+        if (!isNaN(v.P)) S_input.value = v.P
+        if (!isNaN(v.dBm)) dBm_input.value = v.dBm
+        if (!isNaN(v.dBW)) dBW_input.value = v.dBW
     }
 }
