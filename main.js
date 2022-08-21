@@ -50,13 +50,13 @@ class global { // globals
             Object.freeze(this.supported_wave_form)
         }
 
-        static convert_voltage() {
+        static convert_V() {
             const lgV = Math.log10(this.UE)
             this.dBV = 20 * lgV
             this.dBu = this.dBV - 20 * Math.log10(Math.sqrt(1e-3 * 600))
         }
 
-        static convert_power() {
+        static convert_W() {
             this.dBW = 10 * Math.log10(this.P)
             this.dBm = this.dBW + 30
         }
@@ -80,10 +80,10 @@ class global { // globals
         read() // DON'T FORGET THIS. Or undefined values will bring about some peculiar behaviors.
         const v = value_keeper
         // Here we primarily make Z fixed when U has changed
-        v.convert_voltage()
+        v.convert_V()
         v.IE = v.UE / v.Z
         v.P = v.UE * v.IE
-        v.convert_power()
+        v.convert_W()
         write()
     })
     IE_input.addEventListener('input', (e) => {
@@ -91,9 +91,9 @@ class global { // globals
         const v = value_keeper
         // Here we primarily make Z fixed when I has changed
         v.UE = v.IE * v.Z
-        v.convert_voltage()
+        v.convert_V()
         v.P = v.UE * v.IE
-        v.convert_power()
+        v.convert_W()
         write()
     })
     Z_input.addEventListener('input', (e) => {
@@ -102,16 +102,16 @@ class global { // globals
         // Here we primarily make U fixed when Z has changed
         v.IE = v.UE / v.Z
         v.P = v.UE * v.IE
-        v.convert_power()
+        v.convert_W()
         write()
     })
     S_input.addEventListener('input', (e) => {
         read()
         const v = value_keeper
         // Here we primarily make Z fixed and let U, I able to change when S has changed
-        v.convert_voltage()
+        v.convert_V()
         v.UE = Math.sqrt(v.P * v.Z)
-        v.convert_power()
+        v.convert_W()
         v.IE = v.UE / v.Z
         write()
     })
