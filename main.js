@@ -81,7 +81,11 @@ class global { // globals
         const v = value_keeper
         // Here we primarily make Z fixed when I has changed
         v.UE = v.IE * v.Z
+        v.dBV = 20 * Math.log10(v.UE)
+        v.dBu = 20 * Math.log10(v.UE / Math.sqrt(1e-3 * 600))
         v.P = v.UE * v.IE
+        v.dBW = 10 * Math.log10(v.P)
+        v.dBm = v.dBW + 30
         write()
     })
     Z_input.addEventListener('input', (e) => {
@@ -90,13 +94,19 @@ class global { // globals
         // Here we primarily make U fixed when Z has changed
         v.IE = v.UE / v.Z
         v.P = v.UE * v.IE
+        v.dBW = 10 * Math.log10(v.P)
+        v.dBm = v.dBW + 30
         write()
     })
     S_input.addEventListener('input', (e) => {
         read()
         const v = value_keeper
         // Here we primarily make Z fixed and let U, I able to change when S has changed
+        v.dBW = 10 * Math.log10(v.P)
+        v.dBm = v.dBW + 30
         v.UE = Math.sqrt(v.P * v.Z)
+        v.dBV = 20 * Math.log10(v.UE)
+        v.dBu = 20 * Math.log10(v.UE / Math.sqrt(1e-3 * 600))
         v.IE = v.UE / v.Z
         write()
     })
