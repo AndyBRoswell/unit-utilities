@@ -76,44 +76,36 @@ class global { // globals
     const S_input = number_input[7], dBm_input = number_input[8], dBW_input = number_input[9]
 
     // Add event listeners. Canonical units: V, A, Ω, W (i.e., VA)
-    UE_input.addEventListener('input', (e) => {
-        read() // DON'T FORGET THIS. Or undefined values will bring about some peculiar behaviors.
+    add_input_EH_with_auto_RW(UE_input, () => {
         const v = value_keeper
         // Here we primarily make Z fixed when U has changed
         v.convert_V()
         v.IE = v.UE / v.Z
         v.P = v.UE * v.IE
         v.convert_W()
-        write()
     })
-    IE_input.addEventListener('input', (e) => {
-        read()
+    add_input_EH_with_auto_RW(IE_input, () => {
         const v = value_keeper
         // Here we primarily make Z fixed when I has changed
         v.UE = v.IE * v.Z
         v.convert_V()
         v.P = v.UE * v.IE
         v.convert_W()
-        write()
     })
-    Z_input.addEventListener('input', (e) => {
-        read()
+    add_input_EH_with_auto_RW(Z_input, () => {
         const v = value_keeper
         // Here we primarily make U fixed when Z has changed
         v.IE = v.UE / v.Z
         v.P = v.UE * v.IE
         v.convert_W()
-        write()
     })
-    S_input.addEventListener('input', (e) => {
-        read()
+    add_input_EH_with_auto_RW(S_input, () => {
         const v = value_keeper
         // Here we primarily make Z fixed and let U, I able to change when S has changed
         v.convert_V()
         v.UE = Math.sqrt(v.P * v.Z)
         v.convert_W()
         v.IE = v.UE / v.Z
-        write()
     })
 
     // fire the corresponding event handlers and show an example of this unit converter utility
@@ -148,5 +140,17 @@ class global { // globals
         if (!isNaN(v.P)) S_input.value = v.P
         if (!isNaN(v.dBm)) dBm_input.value = v.dBm
         if (!isNaN(v.dBW)) dBW_input.value = v.dBW
+    }
+
+    function add_input_EH_with_auto_RW(element, handler) {
+        element.addEventListener('input', (e) => {
+            read()
+            handler()
+            write()
+        })
+    }
+
+    function add_input_EHs_with_auto_rw(element_handler_map) {
+
     }
 }
