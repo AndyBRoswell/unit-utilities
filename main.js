@@ -53,15 +53,18 @@ class global { // globals
     // get the essential tags (i.e., elements / HTML nodes)
     const fieldset = document.getElementById('audio') // get the targeted unit converter console
     const output_area = fieldset.getElementsByClassName('output-area')[0] // get the message output area
-    const wave_form_select = fieldset.getElementsByTagName('select')[0]
-    const input = fieldset.getElementsByTagName('input')
+    const input = Array.from(fieldset.getElementsByTagName('input'))
+    const radio_button = input.slice(0, 3)
+    const sine_radio_button = radio_button[0], triangular_radio_button = radio_button[1], square_radio_button = radio_button[2]
+    const number_input = input.slice(3)
     // U: Voltage, I: Current, Z: Impedance, S: Apparent Power; [subscript] P: Peak, E: Effective
-    const UP_input = input[3], UE_input = input[4], dBu_input = input[5], dBV_input = input[6]
-    const IP_input = input[7], IE_input = input[8]
-    const Z_input = input[9]
-    const S_input = input[10], dBm_input = input[11], dBW_input = input[12]
+    const UP_input = number_input[0], UE_input = number_input[1], dBu_input = number_input[2], dBV_input = number_input[3]
+    const IP_input = number_input[4], IE_input = number_input[5]
+    const Z_input = number_input[6]
+    const S_input = number_input[7], dBm_input = number_input[8], dBW_input = number_input[9]
 
     // add event listeners
+    // canonical units
     UE_input.addEventListener('input', (e) => {
         read() // DON'T FORGET THIS. Or undefined values will bring about some peculiar behaviors.
         const v = value_keeper
@@ -94,6 +97,8 @@ class global { // globals
         v.IE = v.UE / v.Z
         write()
     })
+    // remaining units
+
 
     // fire the corresponding event handlers and show an example of this unit converter utility
     read() // read initial values
@@ -106,6 +111,7 @@ class global { // globals
 
     function read() {
         const v = value_keeper
+        v.wave_form = sine_radio_button.checked ? v.supported_wave_form.sine : triangular_radio_button.checked ? v.supported_wave_form.triangular : v.supported_wave_form.square
         v.UP = parseFloat(UP_input.value), v.UE = parseFloat(UE_input.value)
         v.dBu = parseFloat(dBu_input.value), v.dBV = parseFloat(dBV_input.value)
         v.IP = parseFloat(IP_input.value), v.IE = parseFloat(IE_input.value)
