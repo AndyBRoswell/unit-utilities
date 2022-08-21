@@ -63,15 +63,7 @@ class global { // globals
     const Z_input = input[6]
     const P_input = input[7], dBm_input = input[8], dBW_input = input[9]
 
-    { // read initial values
-        const v = value_keeper
-        v.UP = parseFloat(UP_input.value), v.UE = parseFloat(UE_input.value)
-        v.dBu = parseFloat(dBu_input.value), v.dBV = parseFloat(dBV_input.value)
-        v.IP = parseFloat(IP_input.value), v.IE = parseFloat(IE_input.value)
-        v.Z = parseFloat(Z_input.value)
-        v.P = parseFloat(P_input.value)
-        v.dBm = parseFloat(dBm_input.value), v.dBw = parseFloat(dBW_input.value)
-    }
+    read() // read initial values
     console.log(value_keeper)
 
     // add event listeners
@@ -79,7 +71,7 @@ class global { // globals
         const v = value_keeper
         v.IE = v.UE / v.Z
         v.P = v.UE * v.IE
-        refresh()
+        write()
     })
 
     // set default values and fire the corresponding event handlers
@@ -90,7 +82,17 @@ class global { // globals
         output_area.innerHTML = message
     }
 
-    function refresh() {
+    function read() {
+        const v = value_keeper
+        v.UP = parseFloat(UP_input.value), v.UE = parseFloat(UE_input.value)
+        v.dBu = parseFloat(dBu_input.value), v.dBV = parseFloat(dBV_input.value)
+        v.IP = parseFloat(IP_input.value), v.IE = parseFloat(IE_input.value)
+        v.Z = parseFloat(Z_input.value)
+        v.P = parseFloat(P_input.value)
+        v.dBm = parseFloat(dBm_input.value), v.dBw = parseFloat(dBW_input.value)
+    }
+
+    function write() {
         const v = value_keeper
         UP_input.value = v.UP, UE_input.value = v.UE, dBu_input.value = v.dBu, dBV_input.value = v.dBV
         IP_input.value = v.IP, IE_input.value = v.IE
