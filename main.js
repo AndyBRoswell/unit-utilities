@@ -153,13 +153,8 @@ class global { // globals
     }
 
     function add_input_EHs_with_auto_rw(E_H_map) {
-        console.log(E_H_map)
         for (const [ e, h ] of E_H_map) {
-            e.addEventListener('input', (e) => {
-                read()
-                h()
-                write()
-            })
+            add_input_EH_with_auto_RW(e, h)
         }
     }
 }
