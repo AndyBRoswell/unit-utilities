@@ -61,8 +61,6 @@ class global { // globals
     const Z_input = input[9]
     const S_input = input[10], dBm_input = input[11], dBW_input = input[12]
 
-    read() // read initial values
-
     // add event listeners
     UE_input.addEventListener('input', (e) => {
         read() // DON'T FORGET THIS. Or undefined values will bring about some peculiar behaviors.
@@ -98,6 +96,7 @@ class global { // globals
     })
 
     // fire the corresponding event handlers and show an example of this unit converter utility
+    read() // read initial values
     UE_input.dispatchEvent(new Event('input', { bubbles: true }))
 
     // local functions
