@@ -150,7 +150,13 @@ class global { // globals
         })
     }
 
-    function add_input_EHs_with_auto_rw(element_handler_map) {
-
+    function add_input_EHs_with_auto_rw(E_H_map) {
+        for (const e in E_H_map) {
+            e.addEventListener('input', (e) => {
+                read()
+                E_H_map[e]()
+                write()
+            })
+        }
     }
 }
