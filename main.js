@@ -1,6 +1,6 @@
 class global { // globals
-    static Synonym = {}
-    static SynonymID = {}
+    static synonym = {}
+    static synonym_ID = {}
 
     static tag = []
 }
@@ -21,7 +21,7 @@ class global { // globals
     ]
     synonym.forEach(g => {
         ++c
-        global.Synonym[c] = g.split(' ')
+        global.synonym[c] = g.split(' ')
     })
 }
 { // process tags
@@ -34,6 +34,24 @@ class global { // globals
 // concrete unit converters
 
 { // audio
+    class value_keeper {
+        static supported_wave_form = { sine: 0, triangular: 1, square: 2, }
+        static wave_form
+        static UP
+        static UE
+        static dBu
+        static dBV
+        static IP
+        static IE
+        static Z
+        static P
+        static dBm
+        static dBw
+        static {
+            Object.freeze(this.supported_wave_form)
+        }
+    }
+
     // get the essential tags (elements / nodes)
     const fieldset = document.getElementById('audio') // get the targeted unit converter console
     const output_area = fieldset.getElementsByClassName('output-area')[0] // get the message output area
@@ -55,5 +73,14 @@ class global { // globals
     // local functions
     function print(message) {
         output_area.innerHTML = message
+    }
+
+    function refresh() {
+        const v = value_keeper
+        UP_input.innerHTML = v.UP, UE_input.innerHTML = v.UE, dBu_input.innerHTML = v.dBu, dBV_input.innerHTML = v.dBV
+        IP_input.innerHTML = v.IP, IE_input.innerHTML = v.IE
+        Z_input.innerHTML = v.Z
+        P_input.innerHTML = v.P
+        dBm_input.innerHTML = v.dBm, dBW_input.innerHTML = v.dBw
     }
 }
