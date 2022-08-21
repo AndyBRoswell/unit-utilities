@@ -35,11 +35,9 @@
             <tr>
                 <td><label>波形</label></td>
                 <td>
-                    <select name="wave-form">
-                        <option value="sine">正弦波</option>
-                        <option value="triangle">三角波</option>
-                        <option value="square">方波</option>
-                    </select>
+                    <input type="radio" name="wave-form" value="sine" checked><label>正弦波</label>
+                    <input type="radio" name="wave-form" value="triangular" disabled><label>三角波</label>
+                    <input type="radio" name="wave-form" value="square"><label>方波</label>
                 </td>
             </tr>
             <tr>
@@ -48,7 +46,7 @@
             </tr>
             <tr>
                 <td><label>电压有效值</label></td>
-                <td><input type="number" name="voltage" value="220"><label>V</label></td>
+                <td><input type="number" name="voltage" value="380"><label>V</label></td>
             </tr>
             <tr>
                 <td></td>

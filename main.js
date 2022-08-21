@@ -56,10 +56,10 @@ class global { // globals
     const wave_form_select = fieldset.getElementsByTagName('select')[0]
     const input = fieldset.getElementsByTagName('input')
     // U: Voltage, I: Current, Z: Impedance, S: Apparent Power; [subscript] P: Peak, E: Effective
-    const UP_input = input[0], UE_input = input[1], dBu_input = input[2], dBV_input = input[3]
-    const IP_input = input[4], IE_input = input[5]
-    const Z_input = input[6]
-    const S_input = input[7], dBm_input = input[8], dBW_input = input[9]
+    const UP_input = input[3], UE_input = input[4], dBu_input = input[5], dBV_input = input[6]
+    const IP_input = input[7], IE_input = input[8]
+    const Z_input = input[9]
+    const S_input = input[10], dBm_input = input[11], dBW_input = input[12]
 
     read() // read initial values
 
@@ -97,8 +97,8 @@ class global { // globals
         write()
     })
 
-    // set default values and fire the corresponding event handlers
-    UE_input.value = 380
+    // fire the corresponding event handlers and show an example of this unit converter utility
+    UE_input.dispatchEvent(new Event('input', { bubbles: true }))
 
     // local functions
     function print(message) {
