@@ -76,7 +76,8 @@ class global { // globals
     const S_input = number_input[7], dBm_input = number_input[8], dBW_input = number_input[9]
 
     // Add event listeners. Canonical units: V, A, Ω, W (i.e., VA)
-    add_input_EH_with_auto_RW(UE_input, () => {
+    const E_H_Map = new Map()
+    E_H_Map.set(UE_input, () => {
         const v = value_keeper
         // Here we primarily make Z fixed when U has changed
         v.convert_V()
@@ -84,7 +85,7 @@ class global { // globals
         v.P = v.UE * v.IE
         v.convert_W()
     })
-    add_input_EH_with_auto_RW(IE_input, () => {
+    E_H_Map.set(IE_input, () => {
         const v = value_keeper
         // Here we primarily make Z fixed when I has changed
         v.UE = v.IE * v.Z
@@ -92,14 +93,14 @@ class global { // globals
         v.P = v.UE * v.IE
         v.convert_W()
     })
-    add_input_EH_with_auto_RW(Z_input, () => {
+    E_H_Map.set(Z_input, () => {
         const v = value_keeper
         // Here we primarily make U fixed when Z has changed
         v.IE = v.UE / v.Z
         v.P = v.UE * v.IE
         v.convert_W()
     })
-    add_input_EH_with_auto_RW(S_input, () => {
+    E_H_Map.set(S_input, () => {
         const v = value_keeper
         // Here we primarily make Z fixed and let U, I able to change when S has changed
         v.convert_V()
@@ -107,6 +108,7 @@ class global { // globals
         v.convert_W()
         v.IE = v.UE / v.Z
     })
+    add_input_EHs_with_auto_rw(E_H_Map)
 
     // fire the corresponding event handlers and show an example of this unit converter utility
     read() // read initial values
@@ -151,10 +153,11 @@ class global { // globals
     }
 
     function add_input_EHs_with_auto_rw(E_H_map) {
-        for (const e in E_H_map) {
+        console.log(E_H_map)
+        for (const [ e, h ] of E_H_map) {
             e.addEventListener('input', (e) => {
                 read()
-                E_H_map[e]()
+                h()
                 write()
             })
         }
