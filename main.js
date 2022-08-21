@@ -75,10 +75,15 @@ class global { // globals
     console.log(value_keeper)
 
     // add event listeners
-    UE_input.value = 380 // set default values and fire the corresponding event handlers
     UE_input.addEventListener('input', (e) => {
-
+        const v = value_keeper
+        v.IE = v.UE / v.Z
+        v.P = v.UE * v.IE
+        refresh()
     })
+
+    // set default values and fire the corresponding event handlers
+    UE_input.value = 380
 
     // local functions
     function print(message) {
