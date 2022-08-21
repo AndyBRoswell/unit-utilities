@@ -63,8 +63,7 @@ class global { // globals
     const Z_input = number_input[6]
     const S_input = number_input[7], dBm_input = number_input[8], dBW_input = number_input[9]
 
-    // add event listeners
-    // canonical units
+    // Add event listeners. Canonical units: V, A, Ω, W (i.e., VA)
     UE_input.addEventListener('input', (e) => {
         read() // DON'T FORGET THIS. Or undefined values will bring about some peculiar behaviors.
         const v = value_keeper
@@ -97,8 +96,6 @@ class global { // globals
         v.IE = v.UE / v.Z
         write()
     })
-    // remaining units
-
 
     // fire the corresponding event handlers and show an example of this unit converter utility
     read() // read initial values
@@ -127,5 +124,9 @@ class global { // globals
         Z_input.value = v.Z
         S_input.value = v.P
         dBm_input.value = v.dBm, dBW_input.value = v.dBw
+    }
+
+    function update_voltages(){
+        const v = value_keeper
     }
 }
