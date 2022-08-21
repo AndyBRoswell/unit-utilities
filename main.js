@@ -80,17 +80,17 @@ class global { // globals
     E_H_Map.set(UE_input, () => {
         const v = value_keeper
         // Here we primarily make Z fixed when U has changed
-        v.convert_V()
         v.IE = v.UE / v.Z
         v.P = v.UE * v.IE
+        v.convert_V()
         v.convert_W()
     })
     E_H_Map.set(IE_input, () => {
         const v = value_keeper
         // Here we primarily make Z fixed when I has changed
         v.UE = v.IE * v.Z
-        v.convert_V()
         v.P = v.UE * v.IE
+        v.convert_V()
         v.convert_W()
     })
     E_H_Map.set(Z_input, () => {
@@ -103,16 +103,34 @@ class global { // globals
     E_H_Map.set(S_input, () => {
         const v = value_keeper
         // Here we primarily make Z fixed and let U, I able to change when S has changed
-        v.convert_V()
         v.UE = Math.sqrt(v.P * v.Z)
-        v.convert_W()
         v.IE = v.UE / v.Z
+        v.convert_V()
+        v.convert_W()
+    })
+    E_H_Map.set(dBV_input, () => {
+        const v = value_keeper
+        v.UE = Math.pow(10, v.dBV / 20)
+        v.IE = v.UE / v.Z
+        v.P = v.UE * v.IE
+        v.convert_V()
+        v.convert_W()
+    })
+    E_H_Map.set(dBu_input, () => {
+        const v = value_keeper
+        console.log("dBu: " + v.dBu)
+        v.UE = Math.pow(10, (v.dBu + 20 * Math.log10(Math.sqrt(0.001 * 600))) / 20)
+        console.log("V: " + v.UE)
+        v.IE = v.UE / v.Z
+        v.P = v.UE * v.IE
+        v.convert_V()
+        v.convert_W()
     })
     add_input_EHs_with_auto_rw(E_H_Map)
 
     // fire the corresponding event handlers and show an example of this unit converter utility
     read() // read initial values
-    UE_input.dispatchEvent(new Event('input', { bubbles: true }))
+    fire_input_event()
 
     // local functions
     function print(message) {
@@ -156,5 +174,9 @@ class global { // globals
         for (const [ e, h ] of E_H_map) {
             add_input_EH_with_auto_RW(e, h)
         }
+    }
+
+    function fire_input_event(element = UE_input) {
+        element.dispatchEvent(new Event('input', { bubbles: true, cancelable: true, }))
     }
 }
