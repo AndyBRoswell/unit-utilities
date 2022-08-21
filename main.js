@@ -6,7 +6,6 @@ class global { // globals
 }
 
 // global process
-
 { // set synonyms
     let c = 0
     let synonym = [
@@ -32,7 +31,6 @@ class global { // globals
 }
 
 // concrete unit converters
-
 { // audio
     class value_keeper {
         static supported_wave_form = { sine: 0, triangular: 1, square: 2, }
@@ -52,7 +50,7 @@ class global { // globals
         }
     }
 
-    // get the essential tags (elements / nodes)
+    // get the essential tags (i.e., elements / HTML nodes)
     const fieldset = document.getElementById('audio') // get the targeted unit converter console
     const output_area = fieldset.getElementsByClassName('output-area')[0] // get the message output area
     const wave_form_select = fieldset.getElementsByTagName('select')[0]
