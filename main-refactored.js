@@ -84,7 +84,7 @@ class global { // globals
         }
     }
 
-    // Event-Handler Map: Add event listeners. Canonical units: V, A, Ω, W (i.e., VA)
+    // Element-Handler Map: Add event listeners. Canonical units: V, A, Ω, W (i.e., VA)
     const E_H_Map = new Map()
     E_H_Map.set(UE_input, () => {
         const v = value_keeper
