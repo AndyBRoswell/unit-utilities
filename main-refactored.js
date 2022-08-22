@@ -82,8 +82,6 @@ class global { // globals
             number_input[i] = number_input[p[i].name] = p[i]
         }
     }
-    console.log(radio_button)
-    console.log(number_input)
 
     // Event-Handler Map: Add event listeners. Canonical units: V, A, Ω, W (i.e., VA)
     const E_H_Map = new Map()
