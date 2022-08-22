@@ -67,15 +67,17 @@ class global { // globals
     const output_area = fieldset.getElementsByClassName('output-area')[0] // get the message output area
     const input = Array.from(fieldset.getElementsByTagName('input'))
     const radio_button = input.slice(0, 3)
-    const sine_radio_button = radio_button[0], triangular_radio_button = radio_button[1], square_radio_button = radio_button[2]
+    const sine_radio_button = radio_button[0], triangular_radio_button = radio_button[1],
+        square_radio_button = radio_button[2]
     const number_input = input.slice(3)
     // U: Voltage, I: Current, Z: Impedance, S: Apparent Power; [subscript] P: Peak, E: Effective
-    const UP_input = number_input[0], UE_input = number_input[1], dBu_input = number_input[2], dBV_input = number_input[3]
+    const UP_input = number_input[0], UE_input = number_input[1], dBu_input = number_input[2],
+        dBV_input = number_input[3]
     const IP_input = number_input[4], IE_input = number_input[5]
     const Z_input = number_input[6]
     const S_input = number_input[7], dBm_input = number_input[8], dBW_input = number_input[9]
 
-    // Add event listeners. Canonical units: V, A, Ω, W (i.e., VA)
+    // Event-Handler Map: Add event listeners. Canonical units: V, A, Ω, W (i.e., VA)
     const E_H_Map = new Map()
     E_H_Map.set(UE_input, () => {
         const v = value_keeper
@@ -144,9 +146,8 @@ class global { // globals
     })
     add_input_EHs_with_auto_rw(E_H_Map)
 
-    // fire the corresponding event handlers and show an example of this unit converter utility
     read() // read initial values
-    fire_input_event()
+    fire_input_event() // fire the corresponding event handlers and show an example of this unit converter utility
 
     // local functions
     function print(message) {
@@ -164,25 +165,22 @@ class global { // globals
         v.dBm = parseFloat(dBm_input.value), v.dBW = parseFloat(dBW_input.value)
     }
 
-    function write() {
+    function write(skipped_elements = new Set()) {
         const v = value_keeper
-        if (!isNaN(v.UP)) UP_input.value = v.UP
-        if (!isNaN(v.UE)) UE_input.value = v.UE
-        if (!isNaN(v.dBu)) dBu_input.value = v.dBu
-        if (!isNaN(v.dBV)) dBV_input.value = v.dBV
-        if (!isNaN(v.IP)) IP_input.value = v.IP
-        if (!isNaN(v.IE)) IE_input.value = v.IE
-        if (!isNaN(v.Z)) Z_input.value = v.Z
-        if (!isNaN(v.P)) S_input.value = v.P
-        if (!isNaN(v.dBm)) dBm_input.value = v.dBm
-        if (!isNaN(v.dBW)) dBW_input.value = v.dBW
+        const value_to_write = [ v.UP, v.UE, v.dBu, v.dBV, v.IP, v.IE, v.Z, v.P, v.dBm, v.dBW ]
+        for (let i = 0; i < number_input.length; ++i) {
+            if (!skipped_elements.has(number_input[i])) {
+                if (!isNaN(value_to_write[i])) number_input[i].value = value_to_write[i]
+                else print(`${number_input[i].name} is NaN.`)
+            }
+        }
     }
 
     function add_input_EH_with_auto_RW(element, handler) {
-        element.addEventListener('input', (e) => {
+        element.addEventListener('input', (event) => {
             read()
             handler()
-            write()
+            write(new Set([ event.target ]))
         })
     }
 
