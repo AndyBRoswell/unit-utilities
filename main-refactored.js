@@ -70,16 +70,20 @@ class global { // globals
     const input = Array.from(fieldset.getElementsByTagName('input'))
     const radio_button = {}
     {
-        const radio_button_precursor = input.slice(0, 3)
-        
+        const radio_button_precursor = input.slice(0, 3), p = radio_button_precursor
+        for (let i = 0; i < p.length; ++i) {
+            radio_button[i] = radio_button[p[i].value] = p[i]
+        }
     }
-    const number_input = input.slice(3)
-    // U: Voltage, I: Current, Z: Impedance, S: Apparent Power; [subscript] P: Peak, E: Effective
-    const UP_input = number_input[0], UE_input = number_input[1], dBu_input = number_input[2],
-        dBV_input = number_input[3]
-    const IP_input = number_input[4], IE_input = number_input[5]
-    const Z_input = number_input[6]
-    const S_input = number_input[8], dBm_input = number_input[9], dBW_input = number_input[10]
+    const number_input = {}
+    { // U: Voltage, I: Current, Z: Impedance, S: Apparent Power; [subscript] P: Peak, E: Effective
+        const number_input_precursor = input.slice(3), p = number_input_precursor
+        for (let i = 0; i < p.length; ++i) {
+            number_input[i] = number_input[p[i].name] = p[i]
+        }
+    }
+    console.log(radio_button)
+    console.log(number_input)
 
     // Event-Handler Map: Add event listeners. Canonical units: V, A, Ω, W (i.e., VA)
     const E_H_Map = new Map()
