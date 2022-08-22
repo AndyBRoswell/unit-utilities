@@ -68,9 +68,15 @@ class global { // globals
     const fieldset = document.getElementById('audio') // get the targeted unit converter console
     const output_area = fieldset.getElementsByClassName('output-area')[0] // get the message output area
     const input = Array.from(fieldset.getElementsByTagName('input'))
-    const radio_button = input.slice(0, 3)
-    const sine_radio_button = radio_button[0], triangular_radio_button = radio_button[1],
-        square_radio_button = radio_button[2]
+    const radio_button_precursor = input.slice(0, 3)
+    const radio_button = {
+        0: radio_button_precursor[0],
+        1: radio_button_precursor[1],
+        2: radio_button_precursor[2],
+        sine: radio_button_precursor[0],
+        triangular: radio_button_precursor[1],
+        square: radio_button_precursor[2],
+    }
     const number_input = input.slice(3)
     // U: Voltage, I: Current, Z: Impedance, S: Apparent Power; [subscript] P: Peak, E: Effective
     const UP_input = number_input[0], UE_input = number_input[1], dBu_input = number_input[2],
