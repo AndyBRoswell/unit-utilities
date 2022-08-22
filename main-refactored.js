@@ -52,6 +52,14 @@ class global { // globals
             Object.freeze(this.supported_wave_form)
         }
 
+        read_from(elements) {
+            
+        }
+
+        write_to(elements) {
+
+        }
+
         convert_V() {
             const lgV = Math.log10(this.UE)
             this.dBV = 20 * lgV
