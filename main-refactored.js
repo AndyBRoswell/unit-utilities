@@ -32,31 +32,33 @@ class global { // globals
 
 // concrete unit converters
 { // audio
-    class value_keeper {
+    class value_keeper { // every instance of this class may be used for undo and redo functions in the future
         static supported_wave_form = { sine: 0, triangular: 1, square: 2, }
-        static wave_form
-        static UP
-        static UE
-        static dBu
-        static dBV
-        static IP
-        static IE
-        static Z
-        static P
-        static dBm
-        static dBW
+        wave_form
+        UP
+        UE
+        dBu
+        dBV
+        IP
+        IE
+        Z
+        P
+        mW
+        dBm
+        dBW
 
         static {
             Object.freeze(this.supported_wave_form)
         }
 
-        static convert_V() {
+        convert_V() {
             const lgV = Math.log10(this.UE)
             this.dBV = 20 * lgV
             this.dBu = this.dBV - 20 * Math.log10(Math.sqrt(1e-3 * 600))
         }
 
-        static convert_W() {
+        convert_W() {
+            this.mW = this.P * 1e3
             this.dBW = 10 * Math.log10(this.P)
             this.dBm = this.dBW + 30
         }
@@ -167,7 +169,7 @@ class global { // globals
 
     function write(skipped_elements = new Set()) {
         const v = value_keeper
-        const value_to_write = [ v.UP, v.UE, v.dBu, v.dBV, v.IP, v.IE, v.Z, v.P, NaN, v.dBm, v.dBW ]
+        const value_to_write = [ v.UP, v.UE, v.dBu, v.dBV, v.IP, v.IE, v.Z, v.P, v.dBm, v.dBW ]
         for (let i = 0; i < number_input.length; ++i) {
             if (!skipped_elements.has(number_input[i])) {
                 if (!isNaN(value_to_write[i])) number_input[i].value = value_to_write[i]
