@@ -53,7 +53,7 @@ class global { // globals
         }
 
         read_from(elements) {
-            
+
         }
 
         write_to(elements) {
