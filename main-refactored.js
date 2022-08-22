@@ -34,6 +34,7 @@ class global { // globals
 { // audio
     class value_keeper { // every instance of this class may be used for undo and redo functions in the future
         static supported_wave_form = { sine: 0, triangular: 1, square: 2, }
+        // U: Voltage, I: Current, Z: Impedance, S: Apparent Power; [subscript] P: Peak, E: Effective
         wave_form
         UP
         UE
@@ -76,7 +77,7 @@ class global { // globals
         }
     }
     const number_input = {}
-    { // U: Voltage, I: Current, Z: Impedance, S: Apparent Power; [subscript] P: Peak, E: Effective
+    {
         const number_input_precursor = input.slice(3), p = number_input_precursor
         for (let i = 0; i < p.length; ++i) {
             number_input[i] = number_input[p[i].name] = p[i]
