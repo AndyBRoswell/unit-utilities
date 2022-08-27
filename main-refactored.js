@@ -83,7 +83,62 @@ class global { // globals
             this.mW_input = i['mW'], this.dBm_input = i['dBm'], this.dBW_input = i['dBW']
 
             // add event handlers
-            
+            const E_H_Map = new Map() // Element-Handler Map: Add event listeners. Canonical units: V, A, Ω, W (i.e., VA)
+            E_H_Map.set(UE_input, () => {
+                // Here we primarily make Z fixed when U has changed
+                this.IE = this.UE / this.Z
+                this.P = this.UE * this.IE
+                this.convert_V()
+                this.convert_W()
+            })
+            E_H_Map.set(IE_input, () => {
+                // Here we primarily make Z fixed when I has changed
+                this.UE = this.IE * this.Z
+                this.P = this.UE * this.IE
+                this.convert_V()
+                this.convert_W()
+            })
+            E_H_Map.set(Z_input, () => {
+                // Here we primarily make U fixed when Z has changed
+                this.IE = this.UE / this.Z
+                this.P = this.UE * this.IE
+                this.convert_W()
+            })
+            E_H_Map.set(S_input, () => {
+                // Here we primarily make Z fixed and let U, I able to change when S has changed
+                this.UE = Math.sqrt(this.P * this.Z)
+                this.IE = this.UE / this.Z
+                this.convert_V()
+                this.convert_W()
+            })
+            E_H_Map.set(dBV_input, () => {
+                this.UE = Math.pow(10, this.dBV / 20)
+                this.IE = this.UE / this.Z
+                this.P = this.UE * this.IE
+                this.convert_V()
+                this.convert_W()
+            })
+            E_H_Map.set(dBu_input, () => {
+                this.UE = Math.pow(10, (this.dBu + 20 * Math.log10(Math.sqrt(0.001 * 600))) / 20)
+                this.IE = this.UE / this.Z
+                this.P = this.UE * this.IE
+                this.convert_V()
+                this.convert_W()
+            })
+            E_H_Map.set(dBW_input, () => {
+                this.P = Math.pow(10, this.dBW / 10)
+                this.UE = Math.sqrt(this.P * this.Z)
+                this.IE = this.UE / this.Z
+                this.convert_V()
+                this.convert_W()
+            })
+            E_H_Map.set(dBm_input, () => {
+                this.P = Math.pow(10, (this.dBm - 30) / 10)
+                this.UE = Math.sqrt(this.P * this.Z)
+                this.IE = this.UE / this.Z
+                this.convert_V()
+                this.convert_W()
+            })
         }
 
         read() {
@@ -151,118 +206,10 @@ class global { // globals
         }
     }
 
-    // Element-Handler Map: Add event listeners. Canonical units: V, A, Ω, W (i.e., VA)
-    const E_H_Map = new Map()
-    E_H_Map.set(UE_input, () => {
-        const v = value_keeper
-        // Here we primarily make Z fixed when U has changed
-        v.IE = v.UE / v.Z
-        v.S = v.UE * v.IE
-        v.convert_V()
-        v.convert_W()
-    })
-    E_H_Map.set(IE_input, () => {
-        const v = value_keeper
-        // Here we primarily make Z fixed when I has changed
-        v.UE = v.IE * v.Z
-        v.S = v.UE * v.IE
-        v.convert_V()
-        v.convert_W()
-    })
-    E_H_Map.set(Z_input, () => {
-        const v = value_keeper
-        // Here we primarily make U fixed when Z has changed
-        v.IE = v.UE / v.Z
-        v.S = v.UE * v.IE
-        v.convert_W()
-    })
-    E_H_Map.set(S_input, () => {
-        const v = value_keeper
-        // Here we primarily make Z fixed and let U, I able to change when S has changed
-        v.UE = Math.sqrt(v.P * v.Z)
-        v.IE = v.UE / v.Z
-        v.convert_V()
-        v.convert_W()
-    })
-    E_H_Map.set(dBV_input, () => {
-        const v = value_keeper
-        v.UE = Math.pow(10, v.dBV / 20)
-        v.IE = v.UE / v.Z
-        v.S = v.UE * v.IE
-        v.convert_V()
-        v.convert_W()
-    })
-    E_H_Map.set(dBu_input, () => {
-        const v = value_keeper
-        console.log("dBu: " + v.dBu)
-        v.UE = Math.pow(10, (v.dBu + 20 * Math.log10(Math.sqrt(0.001 * 600))) / 20)
-        console.log("V: " + v.UE)
-        v.IE = v.UE / v.Z
-        v.S = v.UE * v.IE
-        v.convert_V()
-        v.convert_W()
-    })
-    E_H_Map.set(dBW_input, () => {
-        const v = value_keeper
-        v.S = Math.pow(10, v.dBW / 10)
-        v.UE = Math.sqrt(v.P * v.Z)
-        v.IE = v.UE / v.Z
-        v.convert_V()
-        v.convert_W()
-    })
-    E_H_Map.set(dBm_input, () => {
-        const v = value_keeper
-        v.S = Math.pow(10, (v.dBm - 30) / 10)
-        v.UE = Math.sqrt(v.P * v.Z)
-        v.IE = v.UE / v.Z
-        v.convert_V()
-        v.convert_W()
-    })
-    add_input_EHs_with_auto_rw(E_H_Map)
-
     read() // read initial values
     fire_input_event() // fire the corresponding event handlers and show an example of this unit converter utility
 
     // local functions
-    function print(message) {
-        output_area.innerHTML = message
-    }
-
-    function read() {
-        const v = value_keeper
-        v.wave_form = sine_radio_button.checked ? v.supported_wave_form.sine : triangular_radio_button.checked ? v.supported_wave_form.triangular : v.supported_wave_form.square
-        v.UP = parseFloat(UP_input.value), v.UE = parseFloat(UE_input.value)
-        v.dBu = parseFloat(dBu_input.value), v.dBV = parseFloat(dBV_input.value)
-        v.IP = parseFloat(IP_input.value), v.IE = parseFloat(IE_input.value)
-        v.Z = parseFloat(Z_input.value)
-        v.S = parseFloat(S_input.value)
-        v.dBm = parseFloat(dBm_input.value), v.dBW = parseFloat(dBW_input.value)
-    }
-
-    function write(skipped_elements = new Set()) {
-        const v = value_keeper
-        const value_to_write = [ v.UP, v.UE, v.dBu, v.dBV, v.IP, v.IE, v.Z, v.P, v.dBm, v.dBW ]
-        for (let i = 0; i < number_input.length; ++i) {
-            if (!skipped_elements.has(number_input[i])) {
-                if (!isNaN(value_to_write[i])) number_input[i].value = value_to_write[i]
-                else print(`${number_input[i].name} is NaN.`)
-            }
-        }
-    }
-
-    function add_input_EH_with_auto_RW(element, handler) {
-        element.addEventListener('input', (event) => {
-            read()
-            handler()
-            write(new Set([ event.target ]))
-        })
-    }
-
-    function add_input_EHs_with_auto_rw(E_H_map) {
-        for (const [ e, h ] of E_H_map) {
-            add_input_EH_with_auto_RW(e, h)
-        }
-    }
 
     function fire_input_event(element = UE_input) {
         element.dispatchEvent(new Event('input', { bubbles: true, cancelable: true, }))
