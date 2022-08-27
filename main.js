@@ -210,7 +210,6 @@ class global { // globals
     const v = new value_keeper(number_input, radio_button, output_area)
     // fire the corresponding event handlers and show an example of this unit converter utility
     v.UE_input.dispatchEvent(new Event('input', { bubbles: true, cancelable: true, }))
-    console.log(v)
 
     // local functions
 }
