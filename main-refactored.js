@@ -90,15 +90,13 @@ class global { // globals
                 // Here we primarily make Z fixed when U has changed
                 this.IE = this.UE / this.Z
                 this.P = this.UE * this.IE
-                this.convert_V()
-                this.convert_W()
+                this.convert()
             })
             E_H_Map.set(this.IE_input, () => {
                 // Here we primarily make Z fixed when I has changed
                 this.UE = this.IE * this.Z
                 this.P = this.UE * this.IE
-                this.convert_V()
-                this.convert_W()
+                this.convert()
             })
             E_H_Map.set(this.Z_input, () => {
                 // Here we primarily make U fixed when Z has changed
@@ -110,37 +108,39 @@ class global { // globals
                 // Here we primarily make Z fixed and let U, I able to change when S has changed
                 this.UE = Math.sqrt(this.P * this.Z)
                 this.IE = this.UE / this.Z
-                this.convert_V()
-                this.convert_W()
+                this.convert()
             })
             E_H_Map.set(this.dBV_input, () => {
                 this.UE = Math.pow(10, this.dBV / 20)
                 this.IE = this.UE / this.Z
                 this.P = this.UE * this.IE
-                this.convert_V()
-                this.convert_W()
+                this.convert()
             })
             E_H_Map.set(this.dBu_input, () => {
                 this.UE = Math.pow(10, (this.dBu + 20 * Math.log10(Math.sqrt(0.001 * 600))) / 20)
                 this.IE = this.UE / this.Z
                 this.P = this.UE * this.IE
-                this.convert_V()
-                this.convert_W()
+                this.convert()
             })
             E_H_Map.set(this.dBW_input, () => {
                 this.P = Math.pow(10, this.dBW / 10)
                 this.UE = Math.sqrt(this.P * this.Z)
                 this.IE = this.UE / this.Z
-                this.convert_V()
-                this.convert_W()
+                this.convert()
             })
             E_H_Map.set(this.dBm_input, () => {
                 this.P = Math.pow(10, (this.dBm - 30) / 10)
                 this.UE = Math.sqrt(this.P * this.Z)
                 this.IE = this.UE / this.Z
-                this.convert_V()
-                this.convert_W()
+                this.convert()
             })
+            for (const [ e, h ] of E_H_Map) {
+                e.addEventListener('input', (event) => {
+                    this.read()
+                    h()
+                    write(new Set([ event.target ]))
+                })
+            }
         }
 
         read() {
@@ -181,6 +181,11 @@ class global { // globals
             this.mW = this.S * 1e3
             this.dBW = 10 * Math.log10(this.S)
             this.dBm = this.dBW + 30
+        }
+
+        convert() {
+            this.convert_V()
+            this.convert_W()
         }
     }
 
