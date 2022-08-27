@@ -138,7 +138,7 @@ class global { // globals
                 e.addEventListener('input', (event) => {
                     this.read()
                     h()
-                    write(new Set([ event.target ]))
+                    this.write(new Set([ event.target ]))
                 })
             }
         }
@@ -160,7 +160,7 @@ class global { // globals
         }
 
         write(skipped_inputs = new Set()) {
-            const v = [ this.UP, this.UE, this.dBu, this.dBV, this.IP, this.IE, this.Z, this.S, this.mW, this.dBm, this.dBW ]
+            const v = [ this.UP, this.UE, this.dBu, this.dBV, this.IP, this.IE, this.Z, this.S, this.mW, this.dBm, this.dBW, ]
             const n = this.number_input
             this.output_area.innerHTML = ''
             for (let i = 0; i < n.length / 2; ++i) { // here the quantity of string keys is equal to the quantity of number indices
@@ -213,12 +213,9 @@ class global { // globals
         }
     }
 
-    read() // read initial values
-    fire_input_event() // fire the corresponding event handlers and show an example of this unit converter utility
+    const v = new value_keeper(number_input, radio_button, output_area)
+    // fire the corresponding event handlers and show an example of this unit converter utility
+    v.UE_input.dispatchEvent(new Event('input', { bubbles: true, cancelable: true, }))
 
     // local functions
-
-    function fire_input_event(element = UE_input) {
-        element.dispatchEvent(new Event('input', { bubbles: true, cancelable: true, }))
-    }
 }
