@@ -71,8 +71,6 @@ class global { // globals
             Object.freeze(this.supported_wave_form)
         }
 
-        constructor() {}
-
         constructor(number_input, radio_button, output_area) {
             // get inputs and outputs
             this.number_input = number_input, this.radio_button = radio_button, this.output_area = output_area
