@@ -34,7 +34,8 @@ class global { // globals
 { // audio
     class value_keeper { // instances of this class may be used for undo and redo functions in the future
         static supported_wave_form = { sine: 0, triangular: 1, square: 2, }
-        // U: Voltage, I: Current, Z: Impedance, S: Apparent Power; [subscript] P: Peak, E: Effective
+
+        // value storage. U: Voltage, I: Current, Z: Impedance, S: Apparent Power; [subscript] P: Peak, E: Effective
         wave_form
         UP
         UE
@@ -48,6 +49,7 @@ class global { // globals
         dBm
         dBW
 
+        // I/O
         number_input
         radio_button
 
@@ -84,55 +86,55 @@ class global { // globals
 
             // add event handlers
             const E_H_Map = new Map() // Element-Handler Map: Add event listeners. Canonical units: V, A, Ω, W (i.e., VA)
-            E_H_Map.set(UE_input, () => {
+            E_H_Map.set(this.UE_input, () => {
                 // Here we primarily make Z fixed when U has changed
                 this.IE = this.UE / this.Z
                 this.P = this.UE * this.IE
                 this.convert_V()
                 this.convert_W()
             })
-            E_H_Map.set(IE_input, () => {
+            E_H_Map.set(this.IE_input, () => {
                 // Here we primarily make Z fixed when I has changed
                 this.UE = this.IE * this.Z
                 this.P = this.UE * this.IE
                 this.convert_V()
                 this.convert_W()
             })
-            E_H_Map.set(Z_input, () => {
+            E_H_Map.set(this.Z_input, () => {
                 // Here we primarily make U fixed when Z has changed
                 this.IE = this.UE / this.Z
                 this.P = this.UE * this.IE
                 this.convert_W()
             })
-            E_H_Map.set(S_input, () => {
+            E_H_Map.set(this.S_input, () => {
                 // Here we primarily make Z fixed and let U, I able to change when S has changed
                 this.UE = Math.sqrt(this.P * this.Z)
                 this.IE = this.UE / this.Z
                 this.convert_V()
                 this.convert_W()
             })
-            E_H_Map.set(dBV_input, () => {
+            E_H_Map.set(this.dBV_input, () => {
                 this.UE = Math.pow(10, this.dBV / 20)
                 this.IE = this.UE / this.Z
                 this.P = this.UE * this.IE
                 this.convert_V()
                 this.convert_W()
             })
-            E_H_Map.set(dBu_input, () => {
+            E_H_Map.set(this.dBu_input, () => {
                 this.UE = Math.pow(10, (this.dBu + 20 * Math.log10(Math.sqrt(0.001 * 600))) / 20)
                 this.IE = this.UE / this.Z
                 this.P = this.UE * this.IE
                 this.convert_V()
                 this.convert_W()
             })
-            E_H_Map.set(dBW_input, () => {
+            E_H_Map.set(this.dBW_input, () => {
                 this.P = Math.pow(10, this.dBW / 10)
                 this.UE = Math.sqrt(this.P * this.Z)
                 this.IE = this.UE / this.Z
                 this.convert_V()
                 this.convert_W()
             })
-            E_H_Map.set(dBm_input, () => {
+            E_H_Map.set(this.dBm_input, () => {
                 this.P = Math.pow(10, (this.dBm - 30) / 10)
                 this.UE = Math.sqrt(this.P * this.Z)
                 this.IE = this.UE / this.Z
@@ -164,7 +166,7 @@ class global { // globals
             for (let i = 0; i < n.length / 2; ++i) { // here the quantity of string keys is equal to the quantity of number indices
                 if (!skipped_inputs.has(n[i])) {
                     if (!isNaN(v[i])) n[i].value = v[i]
-                    else this.output_area.innerHTML += `${n[i].name} is NaN.`
+                    else this.output_area.innerHTML += `${n[i].name} is NaN.<br>`
                 }
             }
         }
