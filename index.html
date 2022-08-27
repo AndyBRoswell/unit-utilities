@@ -31,7 +31,7 @@
                 <tag>音响</tag>
             </tags>
         </fieldset>
-        <table>
+        <table class="compact-table">
             <tr>
                 <td><label>波形</label></td>
                 <td>
@@ -84,8 +84,42 @@
                 <td></td>
                 <td><input name="dBW"><label>dBW</label><br></td>
             </tr>
+            <tr>
+                <td><label class="output-area"></label></td>
+            </tr>
         </table>
-        <label class="output-area"></label>
+        <table class="compact-table">
+            <tr>
+                <td><label>灵敏度</label></td>
+                <td>
+                    <input name="sensitivity" value="110">
+                    <input type="radio"><label>dB/W@1m（扬声器）</label>
+                    <input type="radio"><label>dB/mW（耳机）</label>
+                </td>
+            </tr>
+            <tr>
+                <td><label>功率</label></td>
+                <td><input name="power" value="2000"><label>W</label></td>
+            </tr>
+            <tr>
+                <td><label>声压级</label></td>
+                <td><input name="SPL"><label>dB</label></td>
+            </tr>
+        </table>
+        <table class="compact-table">
+            <tr>
+                <td><label>声强</label></td>
+                <td><input name="sound-intensity" value="10000"><label>W/m<sup>2</sup></label></td>
+            </tr>
+            <tr>
+                <td><label>声压（空气中）</label></td>
+                <td><input name="sound-pressure"><label>Pa</label></td>
+            </tr>
+            <tr>
+                <td><label>声压级</label></td>
+                <td><input name="SPL"><label>dB</label></td>
+            </tr>
+        </table>
     </fieldset>
 </main>
 </body>

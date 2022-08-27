@@ -17,6 +17,18 @@ header .h0 {
 
 /*Detailed Styles*/
 
+select {
+    background-color: inherit;
+}
+
+input {
+    background-color: inherit;
+}
+
+tags {
+    visibility: hidden;
+}
+
 .tab {
     overflow: scroll; /*sets the desired behavior for overflown elements inside*/
     border: 1px solid #3f3f3f;
@@ -36,14 +48,6 @@ header .h0 {
     background-color: #7f7f7f;
 }
 
-tags {
-    visibility: hidden;
-}
-
-select {
-    background-color: inherit;
-}
-
-input {
-    background-color: inherit;
+.compact-table {
+    display: inline;
 }

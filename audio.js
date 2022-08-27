@@ -167,7 +167,7 @@ const radio_button = {}
 const number_input = {}
 {
     const n = number_input
-    const number_input_precursor = input.slice(3), p = number_input_precursor
+    const number_input_precursor = input.slice(3, 3 + 11), p = number_input_precursor
     for (let i = 0; i < p.length; ++i) {
         n[i] = n[p[i].name] = p[i] // 2 types of indices: number and string
     }
@@ -176,6 +176,3 @@ const number_input = {}
 const v = new value_keeper(number_input, radio_button, output_area)
 // fire the corresponding event handlers and show an example of this unit converter utility
 v.UE_input.dispatchEvent(new Event('input', { bubbles: true, cancelable: true, }))
-
-// local functions
-
