@@ -48,7 +48,7 @@ class global { // globals
         dBm
         dBW
 
-        general_input
+        number_input
         radio_button
 
         UP_input
@@ -63,21 +63,27 @@ class global { // globals
         dBm_input
         dBW_input
 
+        output_area
+
         static {
             Object.freeze(this.supported_wave_form)
         }
 
         constructor() {}
 
-        constructor(general_input, radio_button) {
-            this.general_input = general_input, this.radio_button = radio_button
-            const i = general_input
+        constructor(number_input, radio_button, output_area) {
+            // get inputs and outputs
+            this.number_input = number_input, this.radio_button = radio_button, this.output_area = output_area
+            const i = number_input
             this.UP_input = i['peak-voltage'], this.UE_input = i['voltage']
             this.dBu_input = i['dBu'], this.dBV_input = i['dBV']
             this.IP_input = i['peak-current'], this.IE_input = i['current']
             this.Z_input = i['impedance']
             this.S_input = i['power']
             this.mW_input = i['mW'], this.dBm_input = i['dBm'], this.dBW_input = i['dBW']
+
+            // add event handlers
+            
         }
 
         read() {
@@ -96,8 +102,16 @@ class global { // globals
             }
         }
 
-        write() {
-
+        write(skipped_inputs = new Set()) {
+            const v = [ this.UP, this.UE, this.dBu, this.dBV, this.IP, this.IE, this.Z, this.S, this.mW, this.dBm, this.dBW ]
+            const n = this.number_input
+            this.output_area.innerHTML = ''
+            for (let i = 0; i < n.length / 2; ++i) { // here the quantity of string keys is equal to the quantity of number indices
+                if (!skipped_inputs.has(n[i])) {
+                    if (!isNaN(v[i])) n[i].value = v[i]
+                    else this.output_area.innerHTML += `${n[i].name} is NaN.`
+                }
+            }
         }
 
         convert_V() {
