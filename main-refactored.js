@@ -43,20 +43,60 @@ class global { // globals
         IP
         IE
         Z
-        P
+        S
         mW
         dBm
         dBW
+
+        general_input
+        radio_button
+
+        UP_input
+        UE_input
+        dBu_input
+        dBV_input
+        IP_input
+        IE_input
+        Z_input
+        S_input
+        mW_input
+        dBm_input
+        dBW_input
 
         static {
             Object.freeze(this.supported_wave_form)
         }
 
-        read_from(elements) {
+        constructor() {}
 
+        constructor(general_input, radio_button) {
+            this.general_input = general_input, this.radio_button = radio_button
+            const i = general_input
+            this.UP_input = i['peak-voltage'], this.UE_input = i['voltage']
+            this.dBu_input = i['dBu'], this.dBV_input = i['dBV']
+            this.IP_input = i['peak-current'], this.IE_input = i['current']
+            this.Z_input = i['impedance']
+            this.S_input = i['power']
+            this.mW_input = i['mW'], this.dBm_input = i['dBm'], this.dBW_input = i['dBW']
         }
 
-        write_to(elements) {
+        read() {
+            {
+                const W = value_keeper.supported_wave_form
+                const w = radio_button['wave-form']
+                this.wave_form = w['sine'].checked ? W.sine : w['triangular'].checked ? W.triangular : W.square
+            }
+            {
+                this.UP = parseFloat(this.UP_input.value), this.UE = parseFloat(this.UE_input.value)
+                this.dBu = parseFloat(this.dBu_input.value), this.dBV = parseFloat(this.dBV_input.value)
+                this.IP = parseFloat(this.IP_input.value), this.IE = parseFloat(this.IE_input.value)
+                this.Z = parseFloat(this.Z_input.value)
+                this.S = parseFloat(this.S_input.value)
+                this.mW = parseFloat(this.mW_input.value), this.dBm = parseFloat(this.dBm_input.value), this.dBW = parseFloat(this.dBW_input.value)
+            }
+        }
+
+        write() {
 
         }
 
@@ -67,8 +107,8 @@ class global { // globals
         }
 
         convert_W() {
-            this.mW = this.P * 1e3
-            this.dBW = 10 * Math.log10(this.P)
+            this.mW = this.S * 1e3
+            this.dBW = 10 * Math.log10(this.S)
             this.dBm = this.dBW + 30
         }
     }
@@ -79,16 +119,21 @@ class global { // globals
     const input = Array.from(fieldset.getElementsByTagName('input')) // get the inputs
     const radio_button = {}
     {
+        const r = radio_button
         const radio_button_precursor = input.slice(0, 3), p = radio_button_precursor
-        for (let i = 0; i < p.length; ++i) {
-            radio_button[i] = radio_button[p[i].value] = p[i] // 2 types of indices: number and string
+        for (let i = 0; i < p.length; ++i) { // index type 1 of 2: number
+            r[i] = p[i], r[p[i].name] = {}
+        }
+        for (let i = 0; i < p.length; ++i) { // index type 2 of 2: input.name and input.value
+            r[p[i].name][p[i].value] = p[i]
         }
     }
     const number_input = {}
     {
+        const n = number_input
         const number_input_precursor = input.slice(3), p = number_input_precursor
         for (let i = 0; i < p.length; ++i) {
-            number_input[i] = number_input[p[i].name] = p[i] // 2 types of indices: number and string
+            n[i] = n[p[i].name] = p[i] // 2 types of indices: number and string
         }
     }
 
@@ -98,7 +143,7 @@ class global { // globals
         const v = value_keeper
         // Here we primarily make Z fixed when U has changed
         v.IE = v.UE / v.Z
-        v.P = v.UE * v.IE
+        v.S = v.UE * v.IE
         v.convert_V()
         v.convert_W()
     })
@@ -106,7 +151,7 @@ class global { // globals
         const v = value_keeper
         // Here we primarily make Z fixed when I has changed
         v.UE = v.IE * v.Z
-        v.P = v.UE * v.IE
+        v.S = v.UE * v.IE
         v.convert_V()
         v.convert_W()
     })
@@ -114,7 +159,7 @@ class global { // globals
         const v = value_keeper
         // Here we primarily make U fixed when Z has changed
         v.IE = v.UE / v.Z
-        v.P = v.UE * v.IE
+        v.S = v.UE * v.IE
         v.convert_W()
     })
     E_H_Map.set(S_input, () => {
@@ -129,7 +174,7 @@ class global { // globals
         const v = value_keeper
         v.UE = Math.pow(10, v.dBV / 20)
         v.IE = v.UE / v.Z
-        v.P = v.UE * v.IE
+        v.S = v.UE * v.IE
         v.convert_V()
         v.convert_W()
     })
@@ -139,13 +184,13 @@ class global { // globals
         v.UE = Math.pow(10, (v.dBu + 20 * Math.log10(Math.sqrt(0.001 * 600))) / 20)
         console.log("V: " + v.UE)
         v.IE = v.UE / v.Z
-        v.P = v.UE * v.IE
+        v.S = v.UE * v.IE
         v.convert_V()
         v.convert_W()
     })
     E_H_Map.set(dBW_input, () => {
         const v = value_keeper
-        v.P = Math.pow(10, v.dBW / 10)
+        v.S = Math.pow(10, v.dBW / 10)
         v.UE = Math.sqrt(v.P * v.Z)
         v.IE = v.UE / v.Z
         v.convert_V()
@@ -153,7 +198,7 @@ class global { // globals
     })
     E_H_Map.set(dBm_input, () => {
         const v = value_keeper
-        v.P = Math.pow(10, (v.dBm - 30) / 10)
+        v.S = Math.pow(10, (v.dBm - 30) / 10)
         v.UE = Math.sqrt(v.P * v.Z)
         v.IE = v.UE / v.Z
         v.convert_V()
@@ -176,7 +221,7 @@ class global { // globals
         v.dBu = parseFloat(dBu_input.value), v.dBV = parseFloat(dBV_input.value)
         v.IP = parseFloat(IP_input.value), v.IE = parseFloat(IE_input.value)
         v.Z = parseFloat(Z_input.value)
-        v.P = parseFloat(S_input.value)
+        v.S = parseFloat(S_input.value)
         v.dBm = parseFloat(dBm_input.value), v.dBW = parseFloat(dBW_input.value)
     }
 
