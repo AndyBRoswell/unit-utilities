@@ -32,7 +32,7 @@ class global { // globals
 
 // concrete unit converters
 { // audio
-    class value_keeper { // every instance of this class may be used for undo and redo functions in the future
+    class value_keeper { // instances of this class may be used for undo and redo functions in the future
         static supported_wave_form = { sine: 0, triangular: 1, square: 2, }
         // U: Voltage, I: Current, Z: Impedance, S: Apparent Power; [subscript] P: Peak, E: Effective
         wave_form
@@ -76,19 +76,19 @@ class global { // globals
     // get the essential tags (i.e., elements / HTML nodes)
     const fieldset = document.getElementById('audio') // get the targeted unit converter console
     const output_area = fieldset.getElementsByClassName('output-area')[0] // get the message output area
-    const input = Array.from(fieldset.getElementsByTagName('input'))
+    const input = Array.from(fieldset.getElementsByTagName('input')) // get the inputs
     const radio_button = {}
     {
         const radio_button_precursor = input.slice(0, 3), p = radio_button_precursor
         for (let i = 0; i < p.length; ++i) {
-            radio_button[i] = radio_button[p[i].value] = p[i]
+            radio_button[i] = radio_button[p[i].value] = p[i] // 2 types of indices: number and string
         }
     }
     const number_input = {}
     {
         const number_input_precursor = input.slice(3), p = number_input_precursor
         for (let i = 0; i < p.length; ++i) {
-            number_input[i] = number_input[p[i].name] = p[i]
+            number_input[i] = number_input[p[i].name] = p[i] // 2 types of indices: number and string
         }
     }
 
