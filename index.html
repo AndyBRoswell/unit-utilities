@@ -34,7 +34,7 @@
         <table class="compact-table">
             <tr>
                 <td><label>波形</label></td>
-                <td>
+                <td colspan="2">
                     <input type="radio" name="wave-form" value="sine" checked><label>正弦波</label>
                     <input type="radio" name="wave-form" value="triangular" disabled><label>三角波</label>
                     <input type="radio" name="wave-form" value="square"><label>方波</label>
@@ -42,15 +42,18 @@
             </tr>
             <tr>
                 <td><label>电压峰值</label></td>
-                <td><input name="peak-voltage"><label>V</label></td>
+                <td><input name="peak-voltage"></td>
+                <td><label>V</label></td>
             </tr>
             <tr>
                 <td><label>电压有效值</label></td>
-                <td><input name="voltage" value="380"><label>V</label></td>
+                <td><input name="voltage" value="380"></td>
+                <td><label>V</label></td>
             </tr>
             <tr>
                 <td></td>
-                <td><input name="dBu"><label>dBu</label><br></td>
+                <td><input name="dBu"><br></td>
+                <td><label>dBu</label></td>
             </tr>
             <tr>
                 <td></td>
@@ -85,7 +88,7 @@
                 <td><input name="dBW"><label>dBW</label><br></td>
             </tr>
             <tr>
-                <td><label class="output-area"></label></td>
+                <td colspan="3"><label class="output-area"></label></td>
             </tr>
         </table>
         <table class="compact-table">
@@ -93,7 +96,7 @@
                 <td><label>灵敏度</label></td>
                 <td>
                     <input name="sensitivity" value="110">
-                    <input type="radio"><label>dB/W@1m（扬声器）</label>
+                    <input type="radio" checked><label>dB/W@1m（扬声器）</label>
                     <input type="radio"><label>dB/mW（耳机）</label>
                 </td>
             </tr>
