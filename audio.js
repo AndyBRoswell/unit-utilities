@@ -52,46 +52,46 @@ const partition = global_area.getElementsByClassName('workspace')
             this.mW_input = i['mW'], this.dBm_input = i['dBm'], this.dBW_input = i['dBW']
 
             // add event handlers
-            const E_H_Map = new Map() // Element-Handler Map: Add event listeners. Canonical units: V, A, Ω, W (i.e., VA)
-            E_H_Map.set(this.UE_input, () => { // Here we primarily make Z fixed when U has changed
+            const E_H_Map = new Map(), m = E_H_Map // Element-Handler Map: Add event listeners. Canonical units: V, A, Ω, W (i.e., VA)
+            m.set(this.UE_input, () => { // Here we primarily make Z fixed when U has changed
                 this.IE = this.UE / this.Z
                 this.S = this.UE * this.IE
                 this.convert()
             })
-            E_H_Map.set(this.IE_input, () => { // Here we primarily make Z fixed when I has changed
+            m.set(this.IE_input, () => { // Here we primarily make Z fixed when I has changed
                 this.UE = this.IE * this.Z
                 this.S = this.UE * this.IE
                 this.convert()
             })
-            E_H_Map.set(this.Z_input, () => { // Here we primarily make U fixed when Z has changed
+            m.set(this.Z_input, () => { // Here we primarily make U fixed when Z has changed
                 this.IE = this.UE / this.Z
                 this.S = this.UE * this.IE
                 this.convert_W()
             })
-            E_H_Map.set(this.S_input, () => { // Here we primarily make Z fixed and let U, I able to change when S has changed
+            m.set(this.S_input, () => { // Here we primarily make Z fixed and let U, I able to change when S has changed
                 this.UE = Math.sqrt(this.S * this.Z)
                 this.IE = this.UE / this.Z
                 this.convert()
             })
-            E_H_Map.set(this.dBV_input, () => {
+            m.set(this.dBV_input, () => {
                 this.UE = Math.pow(10, this.dBV / 20)
                 this.IE = this.UE / this.Z
                 this.S = this.UE * this.IE
                 this.convert()
             })
-            E_H_Map.set(this.dBu_input, () => {
+            m.set(this.dBu_input, () => {
                 this.UE = Math.pow(10, (this.dBu + 20 * Math.log10(Math.sqrt(0.001 * 600))) / 20)
                 this.IE = this.UE / this.Z
                 this.S = this.UE * this.IE
                 this.convert()
             })
-            E_H_Map.set(this.dBW_input, () => {
+            m.set(this.dBW_input, () => {
                 this.S = Math.pow(10, this.dBW / 10)
                 this.UE = Math.sqrt(this.S * this.Z)
                 this.IE = this.UE / this.Z
                 this.convert()
             })
-            E_H_Map.set(this.dBm_input, () => {
+            m.set(this.dBm_input, () => {
                 this.S = Math.pow(10, (this.dBm - 30) / 10)
                 this.UE = Math.sqrt(this.S * this.Z)
                 this.IE = this.UE / this.Z
@@ -200,7 +200,15 @@ const partition = global_area.getElementsByClassName('workspace')
         }
 
         constructor(number_input, radio_button, output_area) {
+            // get inputs and outputs
+            this.number_input = number_input, this.radio_button = radio_button, this.output_area = output_area
+            const i = number_input
+            this.power_input = i['power']
+            this.SPL_input = i['SPL']
 
+            // add event handlers
+            const E_H_Map = new Map(), m = E_H_Map // Element-Handler Map: Add event listeners.
+            
         }
 
         read() {
