@@ -2,7 +2,7 @@ const global_area = document.getElementById('audio') // get the targeted unit co
 const partition = global_area.getElementsByClassName('workspace')
 {
     class value_keeper { // instances of this class may be used for undo and redo functions in the future
-        static supported_wave_form = { sine: 0, triangular: 1, square: 2, }
+        static WAVE_FORM = { sine: 0, triangular: 1, square: 2, }
 
         // value storage. U: Voltage, I: Current, Z: Impedance, S: Apparent Power; [subscript] P: Peak, E: Effective
         wave_form
@@ -37,7 +37,7 @@ const partition = global_area.getElementsByClassName('workspace')
         output_area
 
         static {
-            Object.freeze(this.supported_wave_form)
+            Object.freeze(this.WAVE_FORM)
         }
 
         constructor(number_input, radio_button, output_area) {
@@ -108,7 +108,7 @@ const partition = global_area.getElementsByClassName('workspace')
 
         read() {
             {
-                const W = value_keeper.supported_wave_form
+                const W = value_keeper.WAVE_FORM
                 const w = radio_button['wave-form']
                 this.wave_form = w['sine'].checked ? W.sine : w['triangular'].checked ? W.triangular : W.square
             }
@@ -177,6 +177,41 @@ const partition = global_area.getElementsByClassName('workspace')
     v.UE_input.dispatchEvent(new Event('input', { bubbles: true, cancelable: true, }))
 }
 {
+    class value_keeper {
+        static SENSITIVITY_UNIT = { dB_W_1m: 0, dB_mW: 1 }
+
+        // value storage
+        sensitivity_unit
+        power
+        SPL
+
+        // I/O
+        number_input
+        radio_button
+
+        sensitivity_unit_input
+        power_input
+        SPL_input
+
+        output_area
+
+        static {
+            Object.freeze(this.SENSITIVITY_UNIT)
+        }
+
+        constructor(number_input, radio_button, output_area) {
+
+        }
+
+        read() {
+
+        }
+
+        write() {
+
+        }
+    }
+
     const scope = partition[1] // get the targeted part (scope) in the unit converter console
     const input = Array.from(scope.getElementsByTagName('input')) // get the inputs
     const output_area = scope.getElementsByClassName('output-area')[0] // get the message output area
