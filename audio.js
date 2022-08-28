@@ -1,5 +1,5 @@
 const global_area = document.getElementById('audio') // get the targeted unit converter console
-const partition = global_area.getElementsByClassName('workspace')
+const workspace = global_area.getElementsByClassName('workspace')
 {
     class value_keeper { // instances of this class may be used for undo and redo functions in the future
         static WAVE_FORM = { sine: 0, triangular: 1, square: 2, }
@@ -52,7 +52,7 @@ const partition = global_area.getElementsByClassName('workspace')
             this.mW_input = i['mW'], this.dBm_input = i['dBm'], this.dBW_input = i['dBW']
 
             // add event handlers
-            const E_H_Map = new Map(), m = E_H_Map // Element-Handler Map: Add event listeners. Canonical units: V, A, Ω, W (i.e., VA)
+            const E_H_Map = new Map, m = E_H_Map // Element-Handler Map: Add event listeners. Canonical units: V, A, Ω, W (i.e., VA)
             m.set(this.UE_input, () => { // Here we primarily make Z fixed when U has changed
                 this.IE = this.UE / this.Z
                 this.S = this.UE * this.IE
@@ -122,7 +122,7 @@ const partition = global_area.getElementsByClassName('workspace')
             }
         }
 
-        write(skipped_inputs = new Set()) {
+        write(skipped_inputs = new Set) {
             const v = [ this.UP, this.UE, this.dBu, this.dBV, this.IP, this.IE, this.Z, this.S, this.mW, this.dBm, this.dBW, ]
             const n = this.number_input
             this.output_area.innerHTML = ''
@@ -153,7 +153,7 @@ const partition = global_area.getElementsByClassName('workspace')
     }
 
     // get the essential tags (i.e., elements / HTML nodes)
-    const scope = partition[0] // get the targeted part (scope) in the unit converter console
+    const scope = workspace[0] // get the targeted part (scope) in the unit converter console
     const input = Array.from(scope.getElementsByTagName('input')) // get the inputs
     const output_area = scope.getElementsByClassName('output-area')[0] // get the message output area
     const radio_button = {}
@@ -209,7 +209,7 @@ const partition = global_area.getElementsByClassName('workspace')
             this.SPL_input = i['SPL']
 
             // add event handlers
-            const E_H_Map = new Map(), m = E_H_Map // Element-Handler Map: Add event listeners.
+            const E_H_Map = new Map, m = E_H_Map // Element-Handler Map: Add event listeners.
             m.set(this.sensitivity_input, () => {
 
             })
@@ -236,15 +236,32 @@ const partition = global_area.getElementsByClassName('workspace')
         }
 
         read() {
-
+            {
+                const U = value_keeper.SENSITIVITY_UNIT
+                const u = radio_button['sensitivity-unit']
+                this.sensitivity_unit = u['dB/W@1m'].checked ? U.dB_W_1m : U.dB_mW
+            }
+            {
+                this.sensitivity = parseFloat(this.sensitivity_input)
+                this.power = parseFloat(this.power_input)
+                this.SPL = parseFloat(this.SPL_input)
+            }
         }
 
-        write() {
-
+        write(skipped_elements = new Set) {
+            const v = [ this.sensitivity, this.power, this.SPL ]
+            const n = this.number_input
+            this.output_area.innerHTML = ''
+            for (let i = 0; i < Object.keys(n).length; ++i) {
+                if (!skipped_elements.has(n[i])) {
+                    if (!isNaN(v[i])) n[i].value = v[i]
+                    else this.output_area.innerHTML += `${n[i].name} is NaN.<br>`
+                }
+            }
         }
     }
 
-    const scope = partition[1] // get the targeted part (scope) in the unit converter console
+    const scope = workspace[1] // get the targeted part (scope) in the unit converter console
     const input = Array.from(scope.getElementsByTagName('input')) // get the inputs
     const output_area = scope.getElementsByClassName('output-area')[0] // get the message output area
     const radio_button = {}, number_input = {}
