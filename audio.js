@@ -151,8 +151,9 @@ class value_keeper { // instances of this class may be used for undo and redo fu
 
 // get the essential tags (i.e., elements / HTML nodes)
 const fieldset = document.getElementById('audio') // get the targeted unit converter console
-const output_area = fieldset.getElementsByClassName('output-area')[0] // get the message output area
-const input = Array.from(fieldset.getElementsByTagName('input')) // get the inputs
+const scope = fieldset.getElementsByTagName('table')[0] // get the targeted part (scope) in the unit converter console
+const input = Array.from(scope.getElementsByTagName('input')) // get the inputs
+const output_area = scope.getElementsByClassName('output-area')[0] // get the message output area
 const radio_button = {}
 {
     const r = radio_button
