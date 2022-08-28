@@ -177,7 +177,7 @@ const workspace = global_area.getElementsByClassName('workspace')
     v.UE_input.dispatchEvent(new Event('input', { bubbles: true, cancelable: true, }))
 }
 {
-    class value_keeper {
+    class value_keeper { // instances of this class may be used for undo and redo functions in the future
         static SENSITIVITY_UNIT = { dB_W_1m: 0, dB_mW: 1 }
 
         // value storage
