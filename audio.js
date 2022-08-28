@@ -188,15 +188,16 @@ const partition = global_area.getElementsByClassName('workspace')
     {
         const r = radio_button, n = number_input
         input.forEach(i => {
-            switch (i.name) {
+            switch (i.type) {
                 case 'radio':
                     r[Object.keys(r).length] = i
                     break
                 default:
-                    n[Object.keys(n).length] = n[i.name] = i
+                    n[Object.keys(n).length / 2] = n[i.name] = i // 2 types of indices: number and string
                     break
             }
         })
+
+        console.log(r, n)
     }
-    console.log(radio_button, number_input)
 }
