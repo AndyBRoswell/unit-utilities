@@ -252,7 +252,7 @@ const workspace = global_area.getElementsByClassName('workspace')
             const v = [ this.sensitivity, this.power, this.SPL ]
             const n = this.number_input
             this.output_area.innerHTML = ''
-            for (let i = 0; i < Object.keys(n).length; ++i) {
+            for (let i = 0; i < Object.keys(n).length / 2; ++i) {
                 if (!skipped_elements.has(n[i])) {
                     if (!isNaN(v[i])) n[i].value = v[i]
                     else this.output_area.innerHTML += `${n[i].name} is NaN.<br>`
