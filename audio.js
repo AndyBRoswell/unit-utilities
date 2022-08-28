@@ -97,7 +97,7 @@ const partition = global_area.getElementsByClassName('workspace')
                 this.IE = this.UE / this.Z
                 this.convert()
             })
-            for (const [ e, h ] of E_H_Map) {
+            for (const [ e, h ] of m) {
                 e.addEventListener('input', (event) => {
                     this.read()
                     h()
@@ -182,6 +182,7 @@ const partition = global_area.getElementsByClassName('workspace')
 
         // value storage
         sensitivity_unit
+        sensitivity
         power
         SPL
 
@@ -189,7 +190,7 @@ const partition = global_area.getElementsByClassName('workspace')
         number_input
         radio_button
 
-        sensitivity_unit_input
+        sensitivity_input
         power_input
         SPL_input
 
@@ -203,12 +204,35 @@ const partition = global_area.getElementsByClassName('workspace')
             // get inputs and outputs
             this.number_input = number_input, this.radio_button = radio_button, this.output_area = output_area
             const i = number_input
+            this.sensitivity_input = i['sensitivity']
             this.power_input = i['power']
             this.SPL_input = i['SPL']
 
             // add event handlers
             const E_H_Map = new Map(), m = E_H_Map // Element-Handler Map: Add event listeners.
-            
+            m.set(this.sensitivity_input, () => {
+
+            })
+            m.set(this.power_input, () => {
+
+            })
+            m.set(this.SPL_input, () => {
+
+            })
+            const r = radio_button
+            m.set(r['dB/W@1m'], () => {
+
+            })
+            m.set(r['dB/mW'], () => {
+
+            })
+            for (const [ e, h ] of m) {
+                e.addEventListener('input', (event) => {
+                    this.read()
+                    h()
+                    this.write(new Set([ event.target ]))
+                })
+            }
         }
 
         read() {
