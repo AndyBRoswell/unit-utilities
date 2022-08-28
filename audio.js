@@ -1,5 +1,5 @@
-const global_scope = document.getElementById('audio') // get the targeted unit converter console
-const partition = global_scope.getElementsByTagName('table')
+const global_area = document.getElementById('audio') // get the targeted unit converter console
+const partition = global_area.getElementsByClassName('workspace')
 {
     class value_keeper { // instances of this class may be used for undo and redo functions in the future
         static supported_wave_form = { sine: 0, triangular: 1, square: 2, }
@@ -170,7 +170,7 @@ const partition = global_scope.getElementsByTagName('table')
     const number_input = {}
     {
         const n = number_input
-        const number_input_precursor = input.slice(3, 3 + 11), p = number_input_precursor
+        const number_input_precursor = input.slice(3), p = number_input_precursor
         for (let i = 0; i < p.length; ++i) {
             n[i] = n[p[i].name] = p[i] // 2 types of indices: number and string
         }
@@ -181,5 +181,22 @@ const partition = global_scope.getElementsByTagName('table')
     v.UE_input.dispatchEvent(new Event('input', { bubbles: true, cancelable: true, }))
 }
 {
-    const scope = partition[1]
+    const scope = partition[1] // get the targeted part (scope) in the unit converter console
+    const input = Array.from(scope.getElementsByTagName('input')) // get the inputs
+    const output_area = scope.getElementsByClassName('output-area')[0] // get the message output area
+    const radio_button = {}, number_input = {}
+    {
+        const r = radio_button, n = number_input
+        input.forEach(i => {
+            switch (i.name) {
+                case 'radio':
+                    r[Object.keys(r).length] = i
+                    break
+                default:
+                    n[Object.keys(n).length] = n[i.name] = i
+                    break
+            }
+        })
+    }
+    console.log(radio_button, number_input)
 }
