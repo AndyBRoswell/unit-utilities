@@ -160,12 +160,8 @@ const partition = global_area.getElementsByClassName('workspace')
     {
         const r = radio_button
         const radio_button_precursor = input.slice(0, 3), p = radio_button_precursor
-        for (let i = 0; i < p.length; ++i) { // index type 1 of 2: number
-            r[i] = p[i], r[p[i].name] = {}
-        }
-        for (let i = 0; i < p.length; ++i) { // index type 2 of 2: input.name and input.value
-            r[p[i].name][p[i].value] = p[i]
-        }
+        for (let i = 0; i < p.length; ++i) { r[i] = p[i], r[p[i].name] = {} } // index type 1 of 2: number; get ready for index type 2
+        for (let i = 0; i < p.length; ++i) { r[p[i].name][p[i].value] = p[i] } // index type 2 of 2: input.name and input.value
     }
     const number_input = {}
     {
@@ -187,17 +183,17 @@ const partition = global_area.getElementsByClassName('workspace')
     const radio_button = {}, number_input = {}
     {
         const r = radio_button, n = number_input
+        let lr = 0, ln = 0
         input.forEach(i => {
             switch (i.type) {
                 case 'radio':
-                    r[Object.keys(r).length] = i
+                    r[lr++] = i, r[i.name] = {} // index type 1 of 2: number; get ready for index type 2
                     break
                 default:
-                    n[Object.keys(n).length / 2] = n[i.name] = i // 2 types of indices: number and string
+                    n[ln++] = n[i.name] = i // 2 types of indices: number and string
                     break
             }
         })
-
-        console.log(r, n)
+        for (let i = 0; i < lr; ++i) { r[r[i].name][r[i].value] = r[i] } // index type 2 of 2: input.name and input.value
     }
 }
