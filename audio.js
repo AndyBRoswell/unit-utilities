@@ -1,4 +1,5 @@
 const global_scope = document.getElementById('audio') // get the targeted unit converter console
+const partition = global_scope.getElementsByTagName('table')
 {
     class value_keeper { // instances of this class may be used for undo and redo functions in the future
         static supported_wave_form = { sine: 0, triangular: 1, square: 2, }
@@ -151,8 +152,8 @@ const global_scope = document.getElementById('audio') // get the targeted unit c
         }
     }
 
-// get the essential tags (i.e., elements / HTML nodes)
-    const scope = global_scope.getElementsByTagName('table')[0] // get the targeted part (scope) in the unit converter console
+    // get the essential tags (i.e., elements / HTML nodes)
+    const scope = partition[0] // get the targeted part (scope) in the unit converter console
     const input = Array.from(scope.getElementsByTagName('input')) // get the inputs
     const output_area = scope.getElementsByClassName('output-area')[0] // get the message output area
     const radio_button = {}
@@ -176,6 +177,9 @@ const global_scope = document.getElementById('audio') // get the targeted unit c
     }
 
     const v = new value_keeper(number_input, radio_button, output_area)
-// fire the corresponding event handlers and show an example of this unit converter utility
+    // fire the corresponding event handlers and show an example of this unit converter utility
     v.UE_input.dispatchEvent(new Event('input', { bubbles: true, cancelable: true, }))
+}
+{
+    const scope = partition[1]
 }
