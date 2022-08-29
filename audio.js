@@ -290,6 +290,6 @@ const workspace = global_area.getElementsByClassName('workspace')
         }
 
         // fire the corresponding event handlers and show an example of this unit converter utility
-        n['sound-intensity'].dispatchEvent(new Event('input', { bubbles: true, cancelable: true, }))
+        n['SPL'].dispatchEvent(new Event('input', { bubbles: true, cancelable: true, }))
     }
 }
