@@ -182,6 +182,33 @@ const workspace = global_area.getElementsByClassName('workspace')
         // add event handlers for the current value keeper
         const c = current_value_keeper
         const m = new Map // Element-Handler Map: Add event listeners.
-        
+        m.set(n['sensitivity'], () => {
+
+        })
+        m.set(n['power'], () => {
+
+        })
+        m.set(n['SPL'], () => {
+
+        })
+        m.set(r['dB/W@1m'], () => {
+
+        })
+        m.set(r['dB/mW'], () => {
+
+        })
+        const read = () => {
+
+        }
+        const write = () => {
+            
+        }
+        for (const [ e, h ] of m) {
+            e.addEventListener('input', (event) => {
+                read()
+                h()
+                write(new Set([ event.target ]))
+            })
+        }
     }
 }
