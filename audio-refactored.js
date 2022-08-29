@@ -107,17 +107,15 @@ const workspace = global_area.getElementsByClassName('workspace')
             c.convert()
         })
         const read = () => {
-            {
-                const W = value_keeper.WAVE_FORM
-                const w = radio_button['wave-form']
-                c.wave_form = w['sine'].checked ? W.sine : w['triangular'].checked ? W.triangular : W.square
-                c.UP = parseFloat(n['peak-voltage']), c.UE = parseFloat(n['voltage'])
-                c.dBu = parseFloat(n['dBu']), c.dBV = parseFloat(n['dBV'])
-                c.IP = parseFloat(n['peak-current']), c.IE = parseFloat(n['current'])
-                c.Z = parseFloat(n['impedance'])
-                c.S = parseFloat(n['power'])
-                c.mW = parseFloat(n['mW']), c.dBm = parseFloat(n['dBm']), c.dBW = parseFloat(n['dBW'])
-            }
+            const W = value_keeper.WAVE_FORM
+            const w = radio_button['wave-form']
+            c.wave_form = w['sine'].checked ? W.sine : w['triangular'].checked ? W.triangular : W.square
+            c.UP = parseFloat(n['peak-voltage']), c.UE = parseFloat(n['voltage'])
+            c.dBu = parseFloat(n['dBu']), c.dBV = parseFloat(n['dBV'])
+            c.IP = parseFloat(n['peak-current']), c.IE = parseFloat(n['current'])
+            c.Z = parseFloat(n['impedance'])
+            c.S = parseFloat(n['power'])
+            c.mW = parseFloat(n['mW']), c.dBm = parseFloat(n['dBm']), c.dBW = parseFloat(n['dBW'])
         }
         const write = (skipped_inputs = new Set) => {
             const v = [ c.UP, c.UE, c.dBu, c.dBV, c.IP, c.IE, c.Z, c.S, c.mW, c.dBm, c.dBW, ]
