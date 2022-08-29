@@ -45,11 +45,11 @@ const workspace = global_area.getElementsByClassName('workspace')
         }
     }
 
+    const current_value_keeper = new value_keeper
     const scope = workspace[0] // get the targeted part (scope) in the unit converter console
     const input = Array.from(scope.getElementsByTagName('input')) // get the inputs
     const output_area = scope.getElementsByClassName('output-area')[0] // get the message output area
     const radio_button = {}, number_input = {}
-    const current_value_keeper = new value_keeper
     {
         // The purpose of dual indices (compared with just number index): Lessen the modification of code when more inputs are inserted
         const r = radio_button, n = number_input
@@ -159,6 +159,7 @@ const workspace = global_area.getElementsByClassName('workspace')
         }
     }
 
+    const current_value_keeper = new value_keeper
     const scope = workspace[1] // get the targeted part (scope) in the unit converter console
     const input = Array.from(scope.getElementsByTagName('input')) // get the inputs
     const output_area = scope.getElementsByClassName('output-area')[0] // get the message output area
@@ -201,7 +202,7 @@ const workspace = global_area.getElementsByClassName('workspace')
 
         }
         const write = () => {
-            
+
         }
         for (const [ e, h ] of m) {
             e.addEventListener('input', (event) => {
@@ -210,5 +211,8 @@ const workspace = global_area.getElementsByClassName('workspace')
                 write(new Set([ event.target ]))
             })
         }
+
+        // fire the corresponding event handlers and show an example of this unit converter utility
+
     }
 }
