@@ -111,8 +111,6 @@ const workspace = global_area.getElementsByClassName('workspace')
                 const W = value_keeper.WAVE_FORM
                 const w = radio_button['wave-form']
                 v.wave_form = w['sine'].checked ? W.sine : w['triangular'].checked ? W.triangular : W.square
-            }
-            {
                 
             }
         }
