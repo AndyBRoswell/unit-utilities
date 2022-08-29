@@ -107,11 +107,17 @@ const workspace = global_area.getElementsByClassName('workspace')
             v.IE = v.UE / v.Z
             v.convert()
         })
+        const read = () => {
+
+        }
+        const write = (skipped_inputs = new Set) => {
+
+        }
         for (const [ e, h ] of m) {
             e.addEventListener('input', (event) => {
-                this.read()
+                read()
                 h()
-                this.write(new Set([ event.target ]))
+                write(new Set([ event.target ]))
             })
         }
     }
