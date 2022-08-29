@@ -106,6 +106,12 @@ const workspace = global_area.getElementsByClassName('workspace')
             c.IE = c.UE / c.Z
             c.convert()
         })
+        m.set(n['mW'], () => {
+            c.S = c.mW / 1e3
+            c.UE = Math.sqrt(c.S * c.Z)
+            c.IE = c.UE / c.Z
+            c.convert()
+        })
         const read = () => {
             const W = value_keeper.WAVE_FORM
             const w = radio_button['wave-form']
