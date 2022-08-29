@@ -188,9 +188,9 @@ const workspace = global_area.getElementsByClassName('workspace')
             c.power = Math.pow(10, (c.SPL - c.sensitivity) / 10)
         })
         const read = () => {
-            c.sensitivity = n['sensitivity'].value
-            c.power = n['power'].value
-            c.SPL = n['SPL'].value
+            c.sensitivity = parseFloat(n['sensitivity'].value)
+            c.power = parseFloat(n['power'].value)
+            c.SPL = parseFloat(n['SPL'].value)
         }
         const write = (skipped_inputs = new Set) => {
             const v = [ c.sensitivity, c.power, c.SPL ]
