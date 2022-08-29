@@ -59,7 +59,60 @@ const workspace = global_area.getElementsByClassName('workspace')
             for (let i = 0; i < p.length; ++i) { n[i] = n[p[i].name] = p[i] }  // 2 types of indices: number and string
         }
     }
-    {
-        
+    const current_value_keeper = new value_keeper
+    { // add event handlers
+        const v = current_value_keeper
+        const m = new Map // Element-Handler Map: Add event listeners. Canonical units: V, A, Ω, W (i.e., VA)
+        m.set(this.UE_input, () => { // Here we primarily make Z fixed when U has changed
+            this.IE = this.UE / this.Z
+            this.S = this.UE * this.IE
+            this.convert()
+        })
+        m.set(this.IE_input, () => { // Here we primarily make Z fixed when I has changed
+            this.UE = this.IE * this.Z
+            this.S = this.UE * this.IE
+            this.convert()
+        })
+        m.set(this.Z_input, () => { // Here we primarily make U fixed when Z has changed
+            this.IE = this.UE / this.Z
+            this.S = this.UE * this.IE
+            this.convert_W()
+        })
+        m.set(this.S_input, () => { // Here we primarily make Z fixed and let U, I able to change when S has changed
+            this.UE = Math.sqrt(this.S * this.Z)
+            this.IE = this.UE / this.Z
+            this.convert()
+        })
+        m.set(this.dBV_input, () => {
+            this.UE = Math.pow(10, this.dBV / 20)
+            this.IE = this.UE / this.Z
+            this.S = this.UE * this.IE
+            this.convert()
+        })
+        m.set(this.dBu_input, () => {
+            this.UE = Math.pow(10, (this.dBu + 20 * Math.log10(Math.sqrt(0.001 * 600))) / 20)
+            this.IE = this.UE / this.Z
+            this.S = this.UE * this.IE
+            this.convert()
+        })
+        m.set(this.dBW_input, () => {
+            this.S = Math.pow(10, this.dBW / 10)
+            this.UE = Math.sqrt(this.S * this.Z)
+            this.IE = this.UE / this.Z
+            this.convert()
+        })
+        m.set(this.dBm_input, () => {
+            this.S = Math.pow(10, (this.dBm - 30) / 10)
+            this.UE = Math.sqrt(this.S * this.Z)
+            this.IE = this.UE / this.Z
+            this.convert()
+        })
+        for (const [ e, h ] of m) {
+            e.addEventListener('input', (event) => {
+                this.read()
+                h()
+                this.write(new Set([ event.target ]))
+            })
+        }
     }
 }
