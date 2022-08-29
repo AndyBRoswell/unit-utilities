@@ -163,10 +163,10 @@ const workspace = global_area.getElementsByClassName('workspace')
     const scope = workspace[1] // get the targeted part (scope) in the unit converter console
     const input = Array.from(scope.getElementsByTagName('input')) // get the inputs
     const output_area = scope.getElementsByClassName('output-area')[0] // get the message output area
-    const radio_button = {}, number_input = {}
+    const radio_button = {}, number_input = {}, associated_unit_label = {}
     {
         // The purpose of dual indices (compared with just number index): Lessen the modification of code when more inputs are inserted
-        const r = radio_button, n = number_input
+        const r = radio_button, n = number_input, a = associated_unit_label
         let lr = 0, ln = 0
         input.forEach(i => {
             switch (i.type) {
@@ -179,10 +179,11 @@ const workspace = global_area.getElementsByClassName('workspace')
             }
         })
         for (let i = 0; i < lr; ++i) { r[r[i].name][r[i].value] = r[i] } // index type 2 of 2: input.name and input.value
+        a[0] = a['power'] = n['power'].nextSibling, a[1] = a['SPL'] = n['SPL'].nextSibling
 
         // add event handlers for the current value keeper
         const c = current_value_keeper
-        const m = new Map // Element-Handler Map: Add event listeners.
+        let m = new Map // Element-Handler Map: Add event listeners.
         m.set(n['sensitivity'], () => { // Here we primarily make Power fixed when Sensitivity has changed
             c.SPL = c.sensitivity + 10 * Math.log10(c.power)
         })
@@ -191,12 +192,6 @@ const workspace = global_area.getElementsByClassName('workspace')
         })
         m.set(n['SPL'], () => { // Here we primarily make Sensitivity fixed when SPL has changed
             c.power = Math.pow(10, (c.SPL - c.sensitivity) / 10)
-        })
-        m.set(r['dB/W@1m'], () => {
-
-        })
-        m.set(r['dB/mW'], () => {
-
         })
         const read = () => {
 
@@ -210,6 +205,19 @@ const workspace = global_area.getElementsByClassName('workspace')
                 h()
                 write(new Set([ event.target ]))
             })
+        }
+        m = new Map
+        m.set(r['unit']['dB/W@1m'], () => {
+            a['power'].innerHTML = 'W'
+            a['SPL'].innerHTML = 'dB@1m'
+        })
+        m.set(r['unit']['dB/mW'], () => {
+            a['power'].innerHTML = 'mW'
+            a['SPL'].innerHTML = 'dB'
+        })
+        console.log(r, n, a, m)
+        for (const [ e, h ] of m) {
+            e.addEventListener('click', (event) => { h() })
         }
 
         // fire the corresponding event handlers and show an example of this unit converter utility
