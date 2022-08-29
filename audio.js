@@ -4,7 +4,6 @@ const workspace = global_area.getElementsByClassName('workspace')
     class value_keeper { // instances of this class may be used for undo and redo functions in the future
         static WAVE_FORM = { sine: 0, triangular: 1, square: 2, }
 
-        // value storage. U: Voltage, I: Current, Z: Impedance, S: Apparent Power; [subscript] P: Peak, E: Effective
         wave_form
         UP
         UE
@@ -18,119 +17,13 @@ const workspace = global_area.getElementsByClassName('workspace')
         dBm
         dBW
 
-        // I/O
-        number_input
-        radio_button
-
-        UP_input
-        UE_input
-        dBu_input
-        dBV_input
-        IP_input
-        IE_input
-        Z_input
-        S_input
-        mW_input
-        dBm_input
-        dBW_input
-
-        output_area
-
         static {
             Object.freeze(this.WAVE_FORM)
         }
 
-        constructor(number_input, radio_button, output_area) {
-            // get inputs and outputs
-            this.number_input = number_input, this.radio_button = radio_button, this.output_area = output_area
-            const i = number_input
-            this.UP_input = i['peak-voltage'], this.UE_input = i['voltage']
-            this.dBu_input = i['dBu'], this.dBV_input = i['dBV']
-            this.IP_input = i['peak-current'], this.IE_input = i['current']
-            this.Z_input = i['impedance']
-            this.S_input = i['power']
-            this.mW_input = i['mW'], this.dBm_input = i['dBm'], this.dBW_input = i['dBW']
+        constructor(v) {
+            if (v !== undefined) { // then clone from v
 
-            // add event handlers
-            const E_H_Map = new Map, m = E_H_Map // Element-Handler Map: Add event listeners. Canonical units: V, A, Ω, W (i.e., VA)
-            m.set(this.UE_input, () => { // Here we primarily make Z fixed when U has changed
-                this.IE = this.UE / this.Z
-                this.S = this.UE * this.IE
-                this.convert()
-            })
-            m.set(this.IE_input, () => { // Here we primarily make Z fixed when I has changed
-                this.UE = this.IE * this.Z
-                this.S = this.UE * this.IE
-                this.convert()
-            })
-            m.set(this.Z_input, () => { // Here we primarily make U fixed when Z has changed
-                this.IE = this.UE / this.Z
-                this.S = this.UE * this.IE
-                this.convert_W()
-            })
-            m.set(this.S_input, () => { // Here we primarily make Z fixed and let U, I able to change when S has changed
-                this.UE = Math.sqrt(this.S * this.Z)
-                this.IE = this.UE / this.Z
-                this.convert()
-            })
-            m.set(this.dBV_input, () => {
-                this.UE = Math.pow(10, this.dBV / 20)
-                this.IE = this.UE / this.Z
-                this.S = this.UE * this.IE
-                this.convert()
-            })
-            m.set(this.dBu_input, () => {
-                this.UE = Math.pow(10, (this.dBu + 20 * Math.log10(Math.sqrt(0.001 * 600))) / 20)
-                this.IE = this.UE / this.Z
-                this.S = this.UE * this.IE
-                this.convert()
-            })
-            m.set(this.dBW_input, () => {
-                this.S = Math.pow(10, this.dBW / 10)
-                this.UE = Math.sqrt(this.S * this.Z)
-                this.IE = this.UE / this.Z
-                this.convert()
-            })
-            m.set(this.dBm_input, () => {
-                this.S = Math.pow(10, (this.dBm - 30) / 10)
-                this.UE = Math.sqrt(this.S * this.Z)
-                this.IE = this.UE / this.Z
-                this.convert()
-            })
-            for (const [ e, h ] of m) {
-                e.addEventListener('input', (event) => {
-                    this.read()
-                    h()
-                    this.write(new Set([ event.target ]))
-                })
-            }
-        }
-
-        read() {
-            {
-                const W = value_keeper.WAVE_FORM
-                const w = radio_button['wave-form']
-                this.wave_form = w['sine'].checked ? W.sine : w['triangular'].checked ? W.triangular : W.square
-            }
-            {
-                this.UP = parseFloat(this.UP_input.value), this.UE = parseFloat(this.UE_input.value)
-                this.dBu = parseFloat(this.dBu_input.value), this.dBV = parseFloat(this.dBV_input.value)
-                this.IP = parseFloat(this.IP_input.value), this.IE = parseFloat(this.IE_input.value)
-                this.Z = parseFloat(this.Z_input.value)
-                this.S = parseFloat(this.S_input.value)
-                this.mW = parseFloat(this.mW_input.value), this.dBm = parseFloat(this.dBm_input.value), this.dBW = parseFloat(this.dBW_input.value)
-            }
-        }
-
-        write(skipped_inputs = new Set) {
-            const v = [ this.UP, this.UE, this.dBu, this.dBV, this.IP, this.IE, this.Z, this.S, this.mW, this.dBm, this.dBW, ]
-            const n = this.number_input
-            this.output_area.innerHTML = ''
-            for (let i = 0; i < Object.keys(n).length / 2; ++i) { // here the quantity of string keys is equal to the quantity of number indices
-                if (!skipped_inputs.has(n[i])) {
-                    if (!isNaN(v[i])) n[i].value = v[i]
-                    else this.output_area.innerHTML += `${n[i].name} is NaN.<br>`
-                }
             }
         }
 
@@ -152,121 +45,121 @@ const workspace = global_area.getElementsByClassName('workspace')
         }
     }
 
-    // get the essential tags (i.e., elements / HTML nodes)
+    const current_value_keeper = new value_keeper
     const scope = workspace[0] // get the targeted part (scope) in the unit converter console
-    const input = Array.from(scope.getElementsByTagName('input')) // get the inputs
-    const output_area = scope.getElementsByClassName('output-area')[0] // get the message output area
-    const radio_button = {}
-    {
-        const r = radio_button
-        const radio_button_precursor = input.slice(0, 3), p = radio_button_precursor
-        for (let i = 0; i < p.length; ++i) { r[i] = p[i], r[p[i].name] = {} } // index type 1 of 2: number; get ready for index type 2
-        for (let i = 0; i < p.length; ++i) { r[p[i].name][p[i].value] = p[i] } // index type 2 of 2: input.name and input.value
-    }
-    const number_input = {}
-    {
-        const n = number_input
-        const number_input_precursor = input.slice(3), p = number_input_precursor
-        for (let i = 0; i < p.length; ++i) {
-            n[i] = n[p[i].name] = p[i] // 2 types of indices: number and string
-        }
-    }
-
-    const v = new value_keeper(number_input, radio_button, output_area)
-    // fire the corresponding event handlers and show an example of this unit converter utility
-    v.UE_input.dispatchEvent(new Event('input', { bubbles: true, cancelable: true, }))
-}
-{
-    class value_keeper { // instances of this class may be used for undo and redo functions in the future
-        static SENSITIVITY_UNIT = { dB_W_1m: 0, dB_mW: 1 }
-
-        // value storage
-        sensitivity_unit
-        sensitivity
-        power
-        SPL
-
-        // I/O
-        number_input
-        radio_button
-
-        sensitivity_input
-        power_input
-        SPL_input
-
-        output_area
-
-        static {
-            Object.freeze(this.SENSITIVITY_UNIT)
-        }
-
-        constructor(number_input, radio_button, output_area) {
-            // get inputs and outputs
-            this.number_input = number_input, this.radio_button = radio_button, this.output_area = output_area
-            const i = number_input
-            this.sensitivity_input = i['sensitivity']
-            this.power_input = i['power']
-            this.SPL_input = i['SPL']
-
-            // add event handlers
-            const E_H_Map = new Map, m = E_H_Map // Element-Handler Map: Add event listeners.
-            m.set(this.sensitivity_input, () => {
-
-            })
-            m.set(this.power_input, () => {
-
-            })
-            m.set(this.SPL_input, () => {
-
-            })
-            const r = radio_button
-            m.set(r['dB/W@1m'], () => {
-
-            })
-            m.set(r['dB/mW'], () => {
-
-            })
-            for (const [ e, h ] of m) {
-                e.addEventListener('input', (event) => {
-                    this.read()
-                    h()
-                    this.write(new Set([ event.target ]))
-                })
-            }
-        }
-
-        read() {
-            {
-                const U = value_keeper.SENSITIVITY_UNIT
-                const u = radio_button['sensitivity-unit']
-                this.sensitivity_unit = u['dB/W@1m'].checked ? U.dB_W_1m : U.dB_mW
-            }
-            {
-                this.sensitivity = parseFloat(this.sensitivity_input)
-                this.power = parseFloat(this.power_input)
-                this.SPL = parseFloat(this.SPL_input)
-            }
-        }
-
-        write(skipped_elements = new Set) {
-            const v = [ this.sensitivity, this.power, this.SPL ]
-            const n = this.number_input
-            this.output_area.innerHTML = ''
-            for (let i = 0; i < Object.keys(n).length / 2; ++i) {
-                if (!skipped_elements.has(n[i])) {
-                    if (!isNaN(v[i])) n[i].value = v[i]
-                    else this.output_area.innerHTML += `${n[i].name} is NaN.<br>`
-                }
-            }
-        }
-    }
-
-    const scope = workspace[1] // get the targeted part (scope) in the unit converter console
     const input = Array.from(scope.getElementsByTagName('input')) // get the inputs
     const output_area = scope.getElementsByClassName('output-area')[0] // get the message output area
     const radio_button = {}, number_input = {}
     {
+        // The purpose of dual indices (compared with just number index): Lessen the modification of code when more inputs are inserted
         const r = radio_button, n = number_input
+        let p = input.slice(0, 3) // radio button precursor
+        for (let i = 0; i < p.length; ++i) { r[i] = p[i], r[p[i].name] = {} } // index type 1 of 2: number; get ready for index type 2
+        for (let i = 0; i < p.length; ++i) { r[p[i].name][p[i].value] = p[i] } // index type 2 of 2: input.name and input.value
+        p = input.slice(3) // number input precursor
+        for (let i = 0; i < p.length; ++i) { n[i] = n[p[i].name] = p[i] }  // 2 types of indices: number and string
+
+        // add event handlers for the current value keeper
+        const c = current_value_keeper
+        const m = new Map // Element-Handler Map: Add event listeners. Canonical units: V, A, Ω, W (i.e., VA)
+        m.set(n['voltage'], () => { // Here we primarily make Z fixed when U has changed
+            c.IE = c.UE / c.Z
+            c.S = c.UE * c.IE
+            c.convert()
+        })
+        m.set(n['current'], () => { // Here we primarily make Z fixed when I has changed
+            c.UE = c.IE * c.Z
+            c.S = c.UE * c.IE
+            c.convert()
+        })
+        m.set(n['impedance'], () => { // Here we primarily make U fixed when Z has changed
+            c.IE = c.UE / c.Z
+            c.S = c.UE * c.IE
+            c.convert_W()
+        })
+        m.set(n['power'], () => { // Here we primarily make Z fixed and let U, I able to change when S has changed
+            c.UE = Math.sqrt(c.S * c.Z)
+            c.IE = c.UE / c.Z
+            c.convert()
+        })
+        m.set(n['dBV'], () => {
+            c.UE = Math.pow(10, c.dBV / 20)
+            c.IE = c.UE / c.Z
+            c.S = c.UE * c.IE
+            c.convert()
+        })
+        m.set(n['dBu'], () => {
+            c.UE = Math.pow(10, (c.dBu + 20 * Math.log10(Math.sqrt(0.001 * 600))) / 20)
+            c.IE = c.UE / c.Z
+            c.S = c.UE * c.IE
+            c.convert()
+        })
+        m.set(n['dBW'], () => {
+            c.S = Math.pow(10, c.dBW / 10)
+            c.UE = Math.sqrt(c.S * c.Z)
+            c.IE = c.UE / c.Z
+            c.convert()
+        })
+        m.set(n['dBm'], () => {
+            c.S = Math.pow(10, (c.dBm - 30) / 10)
+            c.UE = Math.sqrt(c.S * c.Z)
+            c.IE = c.UE / c.Z
+            c.convert()
+        })
+        const read = () => {
+            const W = value_keeper.WAVE_FORM
+            const w = radio_button['wave-form']
+            c.wave_form = w['sine'].checked ? W.sine : w['triangular'].checked ? W.triangular : W.square
+            c.UP = parseFloat(n['peak-voltage'].value), c.UE = parseFloat(n['voltage'].value)
+            c.dBu = parseFloat(n['dBu'].value), c.dBV = parseFloat(n['dBV'].value)
+            c.IP = parseFloat(n['peak-current'].value), c.IE = parseFloat(n['current'].value)
+            c.Z = parseFloat(n['impedance'].value)
+            c.S = parseFloat(n['power'].value)
+            c.mW = parseFloat(n['mW'].value), c.dBm = parseFloat(n['dBm'].value), c.dBW = parseFloat(n['dBW'].value)
+        }
+        const write = (skipped_inputs = new Set) => {
+            const v = [ c.UP, c.UE, c.dBu, c.dBV, c.IP, c.IE, c.Z, c.S, c.mW, c.dBm, c.dBW, ]
+            output_area.innerHTML = ''
+            for (let i = 0; i < Object.keys(n).length / 2; ++i) {
+                if (!skipped_inputs.has(n[i])) {
+                    if (!isNaN(v[i])) n[i].value = v[i]
+                    else output_area.innerHTML += `${n[i].name} is NaN.<br>`
+                }
+            }
+        }
+        for (const [ e, h ] of m) {
+            e.addEventListener('input', (event) => {
+                read()
+                h()
+                write(new Set([ event.target ]))
+            })
+        }
+
+        // fire the corresponding event handlers and show an example of this unit converter utility
+        n['voltage'].dispatchEvent(new Event('input', { bubbles: true, cancelable: true, }))
+    }
+}
+{
+    class value_keeper { // instances of this class may be used for undo and redo functions in the future
+        sensitivity
+        power
+        SPL
+
+        constructor(v) {
+            if (v !== undefined) { // then clone from v
+
+            }
+        }
+    }
+
+    const current_value_keeper = new value_keeper
+    const scope = workspace[1] // get the targeted part (scope) in the unit converter console
+    const input = Array.from(scope.getElementsByTagName('input')) // get the inputs
+    const output_area = scope.getElementsByClassName('output-area')[0] // get the message output area
+    const radio_button = {}, number_input = {}, associated_unit_label = {}
+    {
+        // The purpose of dual indices (compared with just number index): Lessen the modification of code when more inputs are inserted
+        const r = radio_button, n = number_input, a = associated_unit_label
         let lr = 0, ln = 0
         input.forEach(i => {
             switch (i.type) {
@@ -279,5 +172,57 @@ const workspace = global_area.getElementsByClassName('workspace')
             }
         })
         for (let i = 0; i < lr; ++i) { r[r[i].name][r[i].value] = r[i] } // index type 2 of 2: input.name and input.value
+        a[0] = a['power'] = n['power'].parentNode.nextElementSibling.getElementsByTagName('label')[0]
+        a[1] = a['SPL'] = n['SPL'].parentNode.nextElementSibling.getElementsByTagName('label')[0]
+
+        // add event handlers for the current value keeper
+        const c = current_value_keeper
+        const m = new Map // Element-Handler Map: Add event listeners.
+        m.set(n['sensitivity'], () => { // Here we primarily make Power fixed when Sensitivity has changed
+            c.SPL = c.sensitivity + 10 * Math.log10(c.power)
+        })
+        m.set(n['power'], () => { // Here we primarily make Sensitivity fixed when Power has changed
+            c.SPL = c.sensitivity + 10 * Math.log10(c.power)
+        })
+        m.set(n['SPL'], () => { // Here we primarily make Sensitivity fixed when SPL has changed
+            c.power = Math.pow(10, (c.SPL - c.sensitivity) / 10)
+        })
+        const read = () => {
+            c.sensitivity = parseFloat(n['sensitivity'].value)
+            c.power = parseFloat(n['power'].value)
+            c.SPL = parseFloat(n['SPL'].value)
+        }
+        const write = (skipped_inputs = new Set) => {
+            const v = [ c.sensitivity, c.power, c.SPL ]
+            output_area.innerHTML = ''
+            for (let i = 0; i < Object.keys(n).length / 2; ++i) {
+                if (!skipped_inputs.has(n[i])) {
+                    if (!isNaN(v[i])) n[i].value = v[i]
+                    else output_area.innerHTML += `${n[i].name} is NaN.<br>`
+                }
+            }
+        }
+        for (const [ e, h ] of m) {
+            e.addEventListener('input', (event) => {
+                read()
+                h()
+                write(new Set([ event.target ]))
+            })
+        }
+        m.clear()
+        m.set(r['unit']['dB/W@1m'], () => {
+            a['power'].innerHTML = 'W'
+            a['SPL'].innerHTML = 'dB@1m'
+        })
+        m.set(r['unit']['dB/mW'], () => {
+            a['power'].innerHTML = 'mW'
+            a['SPL'].innerHTML = 'dB'
+        })
+        for (const [ e, h ] of m) {
+            e.addEventListener('click', (event) => { h() })
+        }
+
+        // fire the corresponding event handlers and show an example of this unit converter utility
+        n['power'].dispatchEvent(new Event('input', { bubbles: true, cancelable: true, }))
     }
 }
