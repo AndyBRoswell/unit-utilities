@@ -179,11 +179,12 @@ const workspace = global_area.getElementsByClassName('workspace')
             }
         })
         for (let i = 0; i < lr; ++i) { r[r[i].name][r[i].value] = r[i] } // index type 2 of 2: input.name and input.value
-        a[0] = a['power'] = n['power'].nextSibling, a[1] = a['SPL'] = n['SPL'].nextSibling
+        a[0] = a['power'] = n['power'].parentNode.nextElementSibling.getElementsByTagName('label')[0]
+        a[1] = a['SPL'] = n['SPL'].parentNode.nextElementSibling.getElementsByTagName('label')[0]
 
         // add event handlers for the current value keeper
         const c = current_value_keeper
-        let m = new Map // Element-Handler Map: Add event listeners.
+        const m = new Map // Element-Handler Map: Add event listeners.
         m.set(n['sensitivity'], () => { // Here we primarily make Power fixed when Sensitivity has changed
             c.SPL = c.sensitivity + 10 * Math.log10(c.power)
         })
@@ -206,7 +207,7 @@ const workspace = global_area.getElementsByClassName('workspace')
                 write(new Set([ event.target ]))
             })
         }
-        m = new Map
+        m.clear()
         m.set(r['unit']['dB/W@1m'], () => {
             a['power'].innerHTML = 'W'
             a['SPL'].innerHTML = 'dB@1m'
@@ -215,7 +216,6 @@ const workspace = global_area.getElementsByClassName('workspace')
             a['power'].innerHTML = 'mW'
             a['SPL'].innerHTML = 'dB'
         })
-        console.log(r, n, a, m)
         for (const [ e, h ] of m) {
             e.addEventListener('click', (event) => { h() })
         }
