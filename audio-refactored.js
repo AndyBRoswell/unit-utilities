@@ -52,12 +52,10 @@ const workspace = global_area.getElementsByClassName('workspace')
     {
         const r = radio_button, n = number_input
         {
-            const p = input.slice(0, 3) // radio button precursor
+            let p = input.slice(0, 3) // radio button precursor
             for (let i = 0; i < p.length; ++i) { r[i] = p[i], r[p[i].name] = {} } // index type 1 of 2: number; get ready for index type 2
             for (let i = 0; i < p.length; ++i) { r[p[i].name][p[i].value] = p[i] } // index type 2 of 2: input.name and input.value
-        }
-        {
-            const p = input.slice(3) // number input precursor
+            p = input.slice(3) // number input precursor
             for (let i = 0; i < p.length; ++i) { n[i] = n[p[i].name] = p[i] }  // 2 types of indices: number and string
         }
     }
