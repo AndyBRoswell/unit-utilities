@@ -60,62 +60,72 @@ const workspace = global_area.getElementsByClassName('workspace')
         for (let i = 0; i < p.length; ++i) { n[i] = n[p[i].name] = p[i] }  // 2 types of indices: number and string
 
         // add event handlers for the current value keeper
-        const v = current_value_keeper
+        const c = current_value_keeper
         const m = new Map // Element-Handler Map: Add event listeners. Canonical units: V, A, Ω, W (i.e., VA)
         m.set(n['voltage'], () => { // Here we primarily make Z fixed when U has changed
-            v.IE = v.UE / v.Z
-            v.S = v.UE * v.IE
-            v.convert()
+            c.IE = c.UE / c.Z
+            c.S = c.UE * c.IE
+            c.convert()
         })
         m.set(n['current'], () => { // Here we primarily make Z fixed when I has changed
-            v.UE = v.IE * v.Z
-            v.S = v.UE * v.IE
-            v.convert()
+            c.UE = c.IE * c.Z
+            c.S = c.UE * c.IE
+            c.convert()
         })
         m.set(n['impedance'], () => { // Here we primarily make U fixed when Z has changed
-            v.IE = v.UE / v.Z
-            v.S = v.UE * v.IE
-            v.convert_W()
+            c.IE = c.UE / c.Z
+            c.S = c.UE * c.IE
+            c.convert_W()
         })
         m.set(n['power'], () => { // Here we primarily make Z fixed and let U, I able to change when S has changed
-            v.UE = Math.sqrt(v.S * v.Z)
-            v.IE = v.UE / v.Z
-            v.convert()
+            c.UE = Math.sqrt(c.S * c.Z)
+            c.IE = c.UE / c.Z
+            c.convert()
         })
         m.set(n['dBV'], () => {
-            v.UE = Math.pow(10, v.dBV / 20)
-            v.IE = v.UE / v.Z
-            v.S = v.UE * v.IE
-            v.convert()
+            c.UE = Math.pow(10, c.dBV / 20)
+            c.IE = c.UE / c.Z
+            c.S = c.UE * c.IE
+            c.convert()
         })
         m.set(n['dBu'], () => {
-            v.UE = Math.pow(10, (v.dBu + 20 * Math.log10(Math.sqrt(0.001 * 600))) / 20)
-            v.IE = v.UE / v.Z
-            v.S = v.UE * v.IE
-            v.convert()
+            c.UE = Math.pow(10, (c.dBu + 20 * Math.log10(Math.sqrt(0.001 * 600))) / 20)
+            c.IE = c.UE / c.Z
+            c.S = c.UE * c.IE
+            c.convert()
         })
         m.set(n['dBW'], () => {
-            v.S = Math.pow(10, v.dBW / 10)
-            v.UE = Math.sqrt(v.S * v.Z)
-            v.IE = v.UE / v.Z
-            v.convert()
+            c.S = Math.pow(10, c.dBW / 10)
+            c.UE = Math.sqrt(c.S * c.Z)
+            c.IE = c.UE / c.Z
+            c.convert()
         })
         m.set(n['dBm'], () => {
-            v.S = Math.pow(10, (v.dBm - 30) / 10)
-            v.UE = Math.sqrt(v.S * v.Z)
-            v.IE = v.UE / v.Z
-            v.convert()
+            c.S = Math.pow(10, (c.dBm - 30) / 10)
+            c.UE = Math.sqrt(c.S * c.Z)
+            c.IE = c.UE / c.Z
+            c.convert()
         })
         const read = () => {
             {
                 const W = value_keeper.WAVE_FORM
                 const w = radio_button['wave-form']
-                v.wave_form = w['sine'].checked ? W.sine : w['triangular'].checked ? W.triangular : W.square
-                
+                c.wave_form = w['sine'].checked ? W.sine : w['triangular'].checked ? W.triangular : W.square
+                c.UP = parseFloat(n['peak-voltage']), c.UE = parseFloat(n['voltage'])
+                c.dBu = parseFloat(n['dBu']), c.dBV = parseFloat(n['dBV'])
+                c.IP = parseFloat(n['peak-current']), c.IE = parseFloat(n['current'])
+                c.Z = parseFloat(n['impedance'])
+                c.S = parseFloat(n['power'])
+                c.mW = parseFloat(n['mW']), c.dBm = parseFloat(n['dBm']), c.dBW = parseFloat(n['dBW'])
             }
         }
         const write = (skipped_inputs = new Set) => {
-
+            const v = [ c.UP, c.UE, c.dBu, c.dBV, c.IP, c.IE, c.Z, c.S, c.mW, c.dBm, c.dBW, ]
+            output_area.innerHTML = ''
+            for (let i = 0; i < Object.keys(n).length / 2; ++i) {
+                if (!skipped_inputs.has(n[i])) n[i].value = v[i]
+                else output_area.innerHTML += `${n[i].name} is NaN.<br>`
+            }
         }
         for (const [ e, h ] of m) {
             e.addEventListener('input', (event) => {
