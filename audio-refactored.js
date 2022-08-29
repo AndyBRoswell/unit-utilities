@@ -22,7 +22,7 @@ const workspace = global_area.getElementsByClassName('workspace')
         }
 
         constructor(v) {
-            if (v != null) { // then clone from v
+            if (v !== undefined) { // then clone from v
 
             }
         }
@@ -110,19 +110,21 @@ const workspace = global_area.getElementsByClassName('workspace')
             const W = value_keeper.WAVE_FORM
             const w = radio_button['wave-form']
             c.wave_form = w['sine'].checked ? W.sine : w['triangular'].checked ? W.triangular : W.square
-            c.UP = parseFloat(n['peak-voltage']), c.UE = parseFloat(n['voltage'])
-            c.dBu = parseFloat(n['dBu']), c.dBV = parseFloat(n['dBV'])
-            c.IP = parseFloat(n['peak-current']), c.IE = parseFloat(n['current'])
-            c.Z = parseFloat(n['impedance'])
-            c.S = parseFloat(n['power'])
-            c.mW = parseFloat(n['mW']), c.dBm = parseFloat(n['dBm']), c.dBW = parseFloat(n['dBW'])
+            c.UP = parseFloat(n['peak-voltage'].value), c.UE = parseFloat(n['voltage'].value)
+            c.dBu = parseFloat(n['dBu'].value), c.dBV = parseFloat(n['dBV'].value)
+            c.IP = parseFloat(n['peak-current'].value), c.IE = parseFloat(n['current'].value)
+            c.Z = parseFloat(n['impedance'].value)
+            c.S = parseFloat(n['power'].value)
+            c.mW = parseFloat(n['mW'].value), c.dBm = parseFloat(n['dBm'].value), c.dBW = parseFloat(n['dBW'].value)
         }
         const write = (skipped_inputs = new Set) => {
             const v = [ c.UP, c.UE, c.dBu, c.dBV, c.IP, c.IE, c.Z, c.S, c.mW, c.dBm, c.dBW, ]
             output_area.innerHTML = ''
             for (let i = 0; i < Object.keys(n).length / 2; ++i) {
-                if (!skipped_inputs.has(n[i])) n[i].value = v[i]
-                else output_area.innerHTML += `${n[i].name} is NaN.<br>`
+                if (!skipped_inputs.has(n[i])) {
+                    if (!isNaN(v[i])) n[i].value = v[i]
+                    else output_area.innerHTML += `${n[i].name} is NaN.<br>`
+                }
             }
         }
         for (const [ e, h ] of m) {
@@ -135,5 +137,6 @@ const workspace = global_area.getElementsByClassName('workspace')
 
         // fire the corresponding event handlers and show an example of this unit converter utility
         number_input['voltage'].dispatchEvent(new Event('input', { bubbles: true, cancelable: true, }))
+        console.log(c)
     }
 }
