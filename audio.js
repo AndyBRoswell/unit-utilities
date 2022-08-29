@@ -248,6 +248,48 @@ const workspace = global_area.getElementsByClassName('workspace')
         // The purpose of dual indices (compared with just number index): Lessen the modification of code when more inputs are inserted
         const n = number_input
         for (let i = 0; i < input.length; ++i) n[i] = n[input[i].name] = input[i]
-        
+
+        // add event handlers for the current value keeper
+        const c = current_value_keeper
+        const m = new Map // Element-Handler Map: Add event listeners.
+        const Ir = 1e-12
+        const Pr = 20e-6
+        m.set(n['sound-intensity'], () => {
+            c.SPL = 10 * Math.log10(c.sound_intensity / Ir)
+            c.sound_pressure = Pr * Math.pow(10, c.SPL / 20)
+        })
+        m.set(n['sound-pressure'], () => {
+            c.SPL = 20 * Math.log10(c.sound_pressure / Pr)
+            c.sound_intensity = Ir * Math.pow(10, c.SPL / 10)
+        })
+        m.set(n['SPL'], () => {
+            c.sound_intensity = Ir * Math.pow(10, c.SPL / 10)
+            c.sound_pressure = Pr * Math.pow(10, c.SPL / 20)
+        })
+        const read = () => {
+            c.sound_intensity = parseFloat(n['sound-intensity'].value)
+            c.sound_pressure = parseFloat(n['sound-pressure'].value)
+            c.SPL = parseFloat(n['SPL'].value)
+        }
+        const write = (skipped_inputs = new Set) => {
+            const v = [ c.sound_intensity, c.sound_pressure, c.SPL ]
+            output_area.innerHTML = ''
+            for (let i = 0; i < Object.keys(n).length / 2; ++i) {
+                if (!skipped_inputs.has(n[i])) {
+                    if (!isNaN(v[i])) n[i].value = v[i]
+                    else output_area.innerHTML += `${n[i].name} is NaN.<br>`
+                }
+            }
+        }
+        for (const [ e, h ] of m) {
+            e.addEventListener('input', (event) => {
+                read()
+                h()
+                write(new Set([ event.target ]))
+            })
+        }
+
+        // fire the corresponding event handlers and show an example of this unit converter utility
+        n['sound-intensity'].dispatchEvent(new Event('input', { bubbles: true, cancelable: true, }))
     }
 }
