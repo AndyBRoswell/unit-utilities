@@ -226,3 +226,28 @@ const workspace = global_area.getElementsByClassName('workspace')
         n['power'].dispatchEvent(new Event('input', { bubbles: true, cancelable: true, }))
     }
 }
+{
+    class value_keeper { // instances of this class may be used for undo and redo functions in the future
+        sound_intensity
+        sound_pressure
+        SPL
+
+        constructor(v) {
+            if (v !== undefined) { // then clone from v
+
+            }
+        }
+    }
+
+    const current_value_keeper = new value_keeper
+    const scope = workspace[2] // get the targeted part (scope) in the unit converter console
+    const input = Array.from(scope.getElementsByTagName('input')) // get the inputs
+    const output_area = scope.getElementsByClassName('output-area')[0] // get the message output area
+    const number_input = {}
+    {
+        // The purpose of dual indices (compared with just number index): Lessen the modification of code when more inputs are inserted
+        const n = number_input
+        for (let i = 0; i < input.length; ++i) n[i] = n[input[i].name] = input[i]
+        
+    }
+}
