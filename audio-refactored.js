@@ -141,16 +141,9 @@ const workspace = global_area.getElementsByClassName('workspace')
 }
 {
     class value_keeper { // instances of this class may be used for undo and redo functions in the future
-        static SENSITIVITY_UNIT = { dB_W_1m: 0, dB_mW: 1 }
-
-        // value storage
         sensitivity
         power
         SPL
-
-        static {
-            Object.freeze(this.SENSITIVITY_UNIT)
-        }
 
         constructor(v) {
             if (v !== undefined) { // then clone from v
@@ -195,10 +188,19 @@ const workspace = global_area.getElementsByClassName('workspace')
             c.power = Math.pow(10, (c.SPL - c.sensitivity) / 10)
         })
         const read = () => {
-
+            c.sensitivity = n['sensitivity'].value
+            c.power = n['power'].value
+            c.SPL = n['SPL'].value
         }
-        const write = () => {
-
+        const write = (skipped_inputs = new Set) => {
+            const v = [ c.sensitivity, c.power, c.SPL ]
+            output_area.innerHTML = ''
+            for (let i = 0; i < Object.keys(n).length / 2; ++i) {
+                if (!skipped_inputs.has(n[i])) {
+                    if (!isNaN(v[i])) n[i].value = v[i]
+                    else output_area.innerHTML += `${n[i].name} is NaN.<br>`
+                }
+            }
         }
         for (const [ e, h ] of m) {
             e.addEventListener('input', (event) => {
@@ -221,6 +223,6 @@ const workspace = global_area.getElementsByClassName('workspace')
         }
 
         // fire the corresponding event handlers and show an example of this unit converter utility
-
+        n['power'].dispatchEvent(new Event('input', { bubbles: true, cancelable: true, }))
     }
 }
