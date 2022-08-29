@@ -136,6 +136,52 @@ const workspace = global_area.getElementsByClassName('workspace')
         }
 
         // fire the corresponding event handlers and show an example of this unit converter utility
-        number_input['voltage'].dispatchEvent(new Event('input', { bubbles: true, cancelable: true, }))
+        n['voltage'].dispatchEvent(new Event('input', { bubbles: true, cancelable: true, }))
+    }
+}
+{
+    class value_keeper { // instances of this class may be used for undo and redo functions in the future
+        static SENSITIVITY_UNIT = { dB_W_1m: 0, dB_mW: 1 }
+
+        // value storage
+        sensitivity
+        power
+        SPL
+
+        static {
+            Object.freeze(this.SENSITIVITY_UNIT)
+        }
+
+        constructor(v) {
+            if (v !== undefined) { // then clone from v
+
+            }
+        }
+    }
+
+    const scope = workspace[1] // get the targeted part (scope) in the unit converter console
+    const input = Array.from(scope.getElementsByTagName('input')) // get the inputs
+    const output_area = scope.getElementsByClassName('output-area')[0] // get the message output area
+    const radio_button = {}, number_input = {}
+    {
+        // The purpose of dual indices (compared with just number index): Lessen the modification of code when more inputs are inserted
+        const r = radio_button, n = number_input
+        let lr = 0, ln = 0
+        input.forEach(i => {
+            switch (i.type) {
+                case 'radio':
+                    r[lr++] = i, r[i.name] = {} // index type 1 of 2: number; get ready for index type 2
+                    break
+                default:
+                    n[ln++] = n[i.name] = i // 2 types of indices: number and string
+                    break
+            }
+        })
+        for (let i = 0; i < lr; ++i) { r[r[i].name][r[i].value] = r[i] } // index type 2 of 2: input.name and input.value
+
+        // add event handlers for the current value keeper
+        const c = current_value_keeper
+        const m = new Map // Element-Handler Map: Add event listeners.
+        
     }
 }
