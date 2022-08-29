@@ -183,14 +183,14 @@ const workspace = global_area.getElementsByClassName('workspace')
         // add event handlers for the current value keeper
         const c = current_value_keeper
         const m = new Map // Element-Handler Map: Add event listeners.
-        m.set(n['sensitivity'], () => {
-
+        m.set(n['sensitivity'], () => { // Here we primarily make Power fixed when Sensitivity has changed
+            c.SPL = c.sensitivity + 10 * Math.log10(c.power)
         })
-        m.set(n['power'], () => {
-
+        m.set(n['power'], () => { // Here we primarily make Sensitivity fixed when Power has changed
+            c.SPL = c.sensitivity + 10 * Math.log10(c.power)
         })
-        m.set(n['SPL'], () => {
-
+        m.set(n['SPL'], () => { // Here we primarily make Sensitivity fixed when SPL has changed
+            c.power = Math.pow(10, (c.SPL - c.sensitivity) / 10)
         })
         m.set(r['dB/W@1m'], () => {
 
