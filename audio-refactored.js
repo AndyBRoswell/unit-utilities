@@ -58,6 +58,7 @@ const workspace = global_area.getElementsByClassName('workspace')
         for (let i = 0; i < p.length; ++i) { r[p[i].name][p[i].value] = p[i] } // index type 2 of 2: input.name and input.value
         p = input.slice(3) // number input precursor
         for (let i = 0; i < p.length; ++i) { n[i] = n[p[i].name] = p[i] }  // 2 types of indices: number and string
+        console.log(n)
 
         // add event handlers for the current value keeper
         const c = current_value_keeper
