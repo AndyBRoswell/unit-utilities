@@ -112,6 +112,17 @@ const workspace = global_area.getElementsByClassName('workspace')
             c.IE = c.UE / c.Z
             c.convert()
         })
+        m.set(n['peak-voltage'], () => {
+            const w = value_keeper.WAVE_FORM
+            switch (c) {
+                default: // case w.sine:
+                    break
+                case w.triangular:
+                    break
+                case w.square:
+                    break
+            }
+        })
         const read = () => {
             const W = value_keeper.WAVE_FORM
             const w = radio_button['wave-form']
