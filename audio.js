@@ -187,11 +187,11 @@ const workspace = global_area.getElementsByClassName('workspace')
         }
         const write = (skipped_inputs = new Set) => {
             const v = [ c.UP, c.UE, c.dBu, c.dBV, c.IP, c.IE, c.Z, c.S, c.mW, c.dBm, c.dBW, ]
-            output_area.textContent = ''
+            output_area.innerHTML = ''
             for (let i = 0; i < Object.keys(n).length / 2; ++i) {
                 if (!skipped_inputs.has(n[i])) {
                     if (!isNaN(v[i])) n[i].value = v[i]
-                    else output_area.textContent += `${n[i].name} is NaN.\n`
+                    else output_area.innerHTML += `${n[i].name} is NaN.<br>`
                 }
             }
         }
@@ -281,11 +281,11 @@ const workspace = global_area.getElementsByClassName('workspace')
         }
         const write = (skipped_inputs = new Set) => {
             const v = [ c.sensitivity, c.power, c.SPL ]
-            output_area.textContent = ''
+            output_area.innerHTML = ''
             for (let i = 0; i < Object.keys(n).length / 2; ++i) {
                 if (!skipped_inputs.has(n[i])) {
                     if (!isNaN(v[i])) n[i].value = v[i]
-                    else output_area.textContent += `${n[i].name} is NaN.\n`
+                    else output_area.innerHTML += `${n[i].name} is NaN.<br>`
                 }
             }
         }
@@ -298,12 +298,12 @@ const workspace = global_area.getElementsByClassName('workspace')
         }
         m.clear()
         m.set(r['unit']['dB/W@1m'], () => {
-            a['power'].textContent = 'W'
-            a['SPL'].textContent = 'dB@1m'
+            a['power'].innerHTML = 'W'
+            a['SPL'].innerHTML = 'dB@1m'
         })
         m.set(r['unit']['dB/mW'], () => {
-            a['power'].textContent = 'mW'
-            a['SPL'].textContent = 'dB'
+            a['power'].innerHTML = 'mW'
+            a['SPL'].innerHTML = 'dB'
         })
         for (const [ e, h ] of m) {
             e.addEventListener('click', (event) => { h() })
@@ -360,11 +360,11 @@ const workspace = global_area.getElementsByClassName('workspace')
         }
         const write = (skipped_inputs = new Set) => {
             const v = [ c.sound_intensity, c.sound_pressure, c.SPL ]
-            output_area.textContent = ''
+            output_area.innerHTML = ''
             for (let i = 0; i < Object.keys(n).length / 2; ++i) {
                 if (!skipped_inputs.has(n[i])) {
                     if (!isNaN(v[i])) n[i].value = v[i]
-                    else output_area.textContent += `${n[i].name} is NaN.\n`
+                    else output_area.innerHTML += `${n[i].name} is NaN.<br>`
                 }
             }
         }
