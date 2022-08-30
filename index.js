@@ -25,7 +25,7 @@ class global { // globals
 }
 { // process tags
     const converters = document.getElementsByClassName('converter')
-    for (let converter in converters) {
+    for (const converter in converters) {
 
     }
 }
