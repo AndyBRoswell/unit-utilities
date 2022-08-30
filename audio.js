@@ -1,6 +1,6 @@
 const global_area = document.getElementById('audio') // get the targeted unit converter console
 const workspace = global_area.getElementsByClassName('workspace')
-{
+{ // tags for quick search / select
     const module_tag = "声学 电声 音频 声音 扩声 音响 音箱 功放".split(' ')
     const tag_area = global_area.getElementsByClassName('tag-area')[0]
     module_tag.forEach(i => {
@@ -10,7 +10,6 @@ const workspace = global_area.getElementsByClassName('workspace')
         tag_area.append(tag)
     })
 }
-
 {
     class value_keeper { // instances of this class may be used for undo and redo functions in the future
         static WAVE_FORM = { sine: 0, triangular: 1, square: 2, }
