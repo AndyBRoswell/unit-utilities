@@ -198,6 +198,18 @@ const workspace = global_area.getElementsByClassName('workspace')
                 write(new Set([ event.target ]))
             })
         }
+        m.clear()
+        m.set(r['wave-form']['sine'], () => {
+            c.wave_form = value_keeper.WAVE_FORM.sine
+        })
+        m.set(r['wave-form']['triangular'], () => {
+            c.wave_form = value_keeper.WAVE_FORM.triangular
+        })
+        m.set(r['wave-form']['square'], () => {
+            c.wave_form = value_keeper.WAVE_FORM.square })
+        for (const [ e, h ] of m) {
+            e.addEventListener('click', (event) => { h() })
+        }
 
         // fire the corresponding event handlers and show an example of this unit converter utility
         n['voltage'].dispatchEvent(new Event('input', { bubbles: true, cancelable: true, }))
