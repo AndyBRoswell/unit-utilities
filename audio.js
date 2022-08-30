@@ -142,7 +142,7 @@ const workspace = global_area.getElementsByClassName('workspace')
         })
         m.set(n['peak-voltage'], () => {
             const w = value_keeper.WAVE_FORM
-            switch (c) {
+            switch (c.wave_form) {
                 default: // case w.sine:
                     c.UE = c.UP / Math.sqrt(2)
                     break
@@ -157,7 +157,7 @@ const workspace = global_area.getElementsByClassName('workspace')
         })
         m.set(n['peak-current'], () => {
             const w = value_keeper.WAVE_FORM
-            switch (c) {
+            switch (c.wave_form) {
                 default: // case w.sine:
                     c.IE = c.IP / Math.sqrt(2)
                     break
