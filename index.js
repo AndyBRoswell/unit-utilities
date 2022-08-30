@@ -17,10 +17,11 @@ class global { // globals
 
         '声 声学',
         '电声 电声学',
+        '功放 功率放大器'
     ]
     synonym.forEach(g => {
         ++c
-        global.synonym[c] = g.split(' ')
+        global.synonym[c] = new Set(g.split(' '))
     })
 }
 { // process tags
