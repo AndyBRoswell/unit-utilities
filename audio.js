@@ -31,33 +31,6 @@ const workspace = global_area.getElementsByClassName('workspace')
             const lgV = Math.log10(this.UE)
             this.dBV = 20 * lgV
             this.dBu = this.dBV - 20 * Math.log10(Math.sqrt(1e-3 * 600))
-            const w = value_keeper.WAVE_FORM
-            switch (this.wave_form) {
-                default: // case w.sine:
-                    this.UP = this.UE * Math.sqrt(2)
-                    break
-                case w.triangular:
-                    this.UP = this.UE * Math.sqrt(3)
-                    break
-                case w.square:
-                    this.UP = this.UE
-                    break
-            }
-        }
-
-        convert_A() {
-            const w = value_keeper.WAVE_FORM
-            switch (this.wave_form) {
-                default: // case w.sine:
-                    this.IP = this.IE * Math.sqrt(2)
-                    break
-                case w.triangular:
-                    this.IP = this.IE * Math.sqrt(3)
-                    break
-                case w.square:
-                    this.IP = this.IE
-                    break
-            }
         }
 
         convert_W() {
@@ -66,10 +39,28 @@ const workspace = global_area.getElementsByClassName('workspace')
             this.dBm = this.dBW + 30
         }
 
+        calc_peak() {
+            const w = value_keeper.WAVE_FORM
+            switch (this.wave_form) {
+                default: // case w.sine:
+                    this.UP = this.UE * Math.sqrt(2)
+                    this.IP = this.IE * Math.sqrt(2)
+                    break
+                case w.triangular:
+                    this.UP = this.UE * Math.sqrt(3)
+                    this.IP = this.IE * Math.sqrt(3)
+                    break
+                case w.square:
+                    this.UP = this.UE
+                    this.IP = this.IE
+                    break
+            }
+        }
+
         convert() {
             this.convert_V()
-            this.convert_A()
             this.convert_W()
+            this.calc_peak()
         }
     }
 
@@ -153,7 +144,11 @@ const workspace = global_area.getElementsByClassName('workspace')
                     c.UE = c.UP
                     break
             }
-            c.convert()
+            c.IE = c.UE / c.Z
+            c.IP = c.UP / c.Z
+            c.S = c.UE * c.IE
+            c.convert_V()
+            c.convert_W()
         })
         m.set(n['peak-current'], () => {
             const w = value_keeper.WAVE_FORM
@@ -168,7 +163,11 @@ const workspace = global_area.getElementsByClassName('workspace')
                     c.IE = c.IP
                     break
             }
-            c.convert()
+            c.UE = c.IE * c.Z
+            c.UP = c.IP * c.Z
+            c.S = c.UE * c.IE
+            c.convert_V()
+            c.convert_W()
         })
         const read = () => {
             const W = value_keeper.WAVE_FORM
@@ -201,12 +200,19 @@ const workspace = global_area.getElementsByClassName('workspace')
         m.clear()
         m.set(r['wave-form']['sine'], () => {
             c.wave_form = value_keeper.WAVE_FORM.sine
+            n['peak-voltage'].value = c.UP = c.UE * Math.sqrt(2)
+            n['peak-current'].value = c.IP = c.IE * Math.sqrt(2)
         })
         m.set(r['wave-form']['triangular'], () => {
             c.wave_form = value_keeper.WAVE_FORM.triangular
+            n['peak-voltage'].value = c.UP = c.UE * Math.sqrt(3)
+            n['peak-current'].value = c.IP = c.IE * Math.sqrt(3)
         })
         m.set(r['wave-form']['square'], () => {
-            c.wave_form = value_keeper.WAVE_FORM.square })
+            c.wave_form = value_keeper.WAVE_FORM.square
+            n['peak-voltage'].value = c.UP = c.UE
+            n['peak-current'].value = c.IP = c.IE
+        })
         for (const [ e, h ] of m) {
             e.addEventListener('click', (event) => { h() })
         }
