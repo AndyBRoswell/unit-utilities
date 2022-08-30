@@ -31,6 +31,33 @@ const workspace = global_area.getElementsByClassName('workspace')
             const lgV = Math.log10(this.UE)
             this.dBV = 20 * lgV
             this.dBu = this.dBV - 20 * Math.log10(Math.sqrt(1e-3 * 600))
+            const w = value_keeper.WAVE_FORM
+            switch (this.wave_form) {
+                default: // case w.sine:
+                    this.UP = this.UE * Math.sqrt(2)
+                    break
+                case w.triangular:
+                    this.UP = this.UE * Math.sqrt(3)
+                    break
+                case w.square:
+                    this.UP = this.UE
+                    break
+            }
+        }
+
+        convert_A() {
+            const w = value_keeper.WAVE_FORM
+            switch (this.wave_form) {
+                default: // case w.sine:
+                    this.IP = this.IE * Math.sqrt(2)
+                    break
+                case w.triangular:
+                    this.IP = this.IE * Math.sqrt(3)
+                    break
+                case w.square:
+                    this.IP = this.IE
+                    break
+            }
         }
 
         convert_W() {
@@ -41,6 +68,7 @@ const workspace = global_area.getElementsByClassName('workspace')
 
         convert() {
             this.convert_V()
+            this.convert_A()
             this.convert_W()
         }
     }
@@ -75,7 +103,7 @@ const workspace = global_area.getElementsByClassName('workspace')
         m.set(n['impedance'], () => { // Here we primarily make U fixed when Z has changed
             c.IE = c.UE / c.Z
             c.S = c.UE * c.IE
-            c.convert_W()
+            c.convert()
         })
         m.set(n['power'], () => { // Here we primarily make Z fixed and let U, I able to change when S has changed
             c.UE = Math.sqrt(c.S * c.Z)
@@ -116,12 +144,31 @@ const workspace = global_area.getElementsByClassName('workspace')
             const w = value_keeper.WAVE_FORM
             switch (c) {
                 default: // case w.sine:
+                    c.UE = c.UP / Math.sqrt(2)
                     break
                 case w.triangular:
+                    c.UE = c.UP / Math.sqrt(3)
                     break
                 case w.square:
+                    c.UE = c.UP
                     break
             }
+            c.convert()
+        })
+        m.set(n['peak-current'], () => {
+            const w = value_keeper.WAVE_FORM
+            switch (c) {
+                default: // case w.sine:
+                    c.IE = c.IP / Math.sqrt(2)
+                    break
+                case w.triangular:
+                    c.IE = c.IP / Math.sqrt(3)
+                    break
+                case w.square:
+                    c.IE = c.IP
+                    break
+            }
+            c.convert()
         })
         const read = () => {
             const W = value_keeper.WAVE_FORM
