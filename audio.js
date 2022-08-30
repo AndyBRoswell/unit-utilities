@@ -4,8 +4,8 @@ const workspace = global_area.getElementsByClassName('workspace')
     const module_tag = "声学 电声 音频 声音 扩声 音响 音箱 功放".split(' ')
     const tag_area = global_area.getElementsByClassName('tag-area')[0]
     module_tag.forEach(i => {
-        const tag = document.createElement('li')
-        // tag.className = 'inline-li'
+        const tag = document.createElement('label')
+        tag.className = 'tag'
         tag.textContent = i
         tag_area.append(tag)
     })

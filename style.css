@@ -52,6 +52,6 @@ input:not([type]) {
     display: inline;
 }
 
-.inline-li {
-    display: inline;
+.tag {
+    padding: 0 1ch 0 1ch
 }
